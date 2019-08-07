@@ -163,12 +163,74 @@ module.exports = function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
         "productName": "appGitMarkdownDocs",
-        appId: 'app_git_markdown_docs',
-        "win": {
-            "target": ["portable"]
+        
+        "appId": "com.hightemp.app_git_markdown_docs",
+        "copyright": "Copyright © 2018-present Fabio Spampinato",
+        "afterAllArtifactBuild": "scripts/build/hook_after_build.js",
+        "afterPack": "scripts/build/hook_after_pack.js",
+        "directories": {
+          "output": "releases"
         },
-        "portable": {
-            "artifactName": "appGitMarkdownDocs.exe"
+        "mac": {
+          "target": [
+            "dmg",
+            "pkg",
+            "zip"
+          ],
+          "category": "public.app-category.utilities",
+          "type": "distribution"
+        },
+        "dmg": {
+          "iconSize": 160,
+          "iconTextSize": 12,
+          "window": {
+            "width": 660,
+            "height": 400
+          },
+          "contents": [
+            {
+              "x": 180,
+              "y": 170,
+              "type": "file"
+            },
+            {
+              "x": 480,
+              "y": 170,
+              "type": "link",
+              "path": "/Applications"
+            }
+          ]
+        },
+        "pkg": {
+        },
+        "win": {
+          "target": [
+            "nsis",
+            "portable",
+            "zip"
+          ],
+        },
+        "nsis": {
+          "warningsAsErrors": false
+        },
+        "linux": {
+          "target": [
+            "AppImage",
+            "deb",
+            "rpm",
+            "snap"
+          ],
+          "category": "Utility"
+        },
+        "snap": {
+          "grade": "stable",
+          "summary": ""
+        },
+        "publish": {
+          "provider": "github",
+          "owner": "appGitMarkdownDocs",
+          "releaseType": "release",
+          "publishAutoUpdate": true
         }
       }
     }
