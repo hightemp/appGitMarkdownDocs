@@ -82,7 +82,7 @@ module.exports = function (ctx) {
 
     devServer: {
       // https: true,
-      // port: 8080,
+      port: 8080,
       open: true // opens browser window automatically
     },
 
@@ -97,9 +97,9 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {}, // only for NON InjectManifest
       manifest: {
-        // name: 'appGitMarkdownDocs',
-        // short_name: 'appGitMarkdownDocs',
-        // description: 'A Quasar Framework app',
+        name: 'appGitMarkdownDocs',
+        short_name: 'appGitMarkdownDocs',
+        description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -162,9 +162,14 @@ module.exports = function (ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
+        "productName": "appGitMarkdownDocs",
         appId: 'app_git_markdown_docs',
-        target: "portable"
+        "win": {
+            "target": ["portable"]
+        },
+        "portable": {
+            "artifactName": "appGitMarkdownDocs.exe"
+        }
       }
     }
   }
