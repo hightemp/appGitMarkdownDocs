@@ -165,9 +165,7 @@ module.exports = function (ctx) {
         "productName": "appGitMarkdownDocs",
         
         "appId": "com.hightemp.app_git_markdown_docs",
-        "copyright": "Copyright © 2018-present Fabio Spampinato",
-        "afterAllArtifactBuild": "scripts/build/hook_after_build.js",
-        "afterPack": "scripts/build/hook_after_pack.js",
+        "copyright": "",
         "directories": {
           "output": "releases"
         },
