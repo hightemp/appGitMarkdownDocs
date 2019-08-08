@@ -10,7 +10,6 @@
                 <q-tab 
                     v-for="(oItem, iIndex) in aRepositories" 
                     :name="iIndex"
-                    :active="iActiveTab == iIndex"
                 >
                     <template slot="default">
                         <div
@@ -27,9 +26,9 @@
                 </q-tab>
             </q-tabs>
             <q-btn-group flat>
-                <q-btn icon="add" />
-                <q-btn icon="create" :disable="iActiveTab == -1"/>
-                <q-btn icon="settings" />
+                <q-btn @click="fnShowAddWindow" icon="add" />
+                <q-btn @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
+                <q-btn @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
         
@@ -38,7 +37,7 @@
         <q-tab-panels 
             v-model="iActiveTab" 
             animated
-        >123
+        >
             <template slot="default">
                 No repository selected..
             </template>
@@ -57,9 +56,6 @@
         </q-tab-panels>
     </div>
 </template>
-
-<style>
-</style>
 
 <script>
     
@@ -87,6 +83,7 @@ export default {
             bShowLoadingScreen: false,
             
             iActiveTab: -1,
+            
             aRepositories: [
             
                 {
@@ -113,6 +110,18 @@ export default {
     },
   
     methods: {
+        fnShowAddWindow: function()
+        {
+            console.log('fnShowAddWindow');
+        },
+        fnShowEditWindow: function()
+        {
+            console.log('fnShowEditWindow');        
+        },
+        fnShowSettings: function()
+        {
+            console.log('fnShowSettings');        
+        },
         fnCloseTab: function(iIndex)
         {
             console.log('fnCloseTab');
@@ -265,7 +274,7 @@ export default {
     mounted: function()
     {
         console.log('PageIndex mounted');
-        this.iActiveTab = localStorage.getItem('iActiveTab');
+        //this.iActiveTab = localStorage.getItem('iActiveTab');
         //this.fnGetRepositories();
         console.log('this.iActiveTab', this.iActiveTab);
     }
