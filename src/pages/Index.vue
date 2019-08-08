@@ -2,12 +2,15 @@
     <div>
         <div id="indexpage-top-panel">
             <q-tabs
-                @select="fnSelectTab"
+                @input="fnSelectTab"
+                align="left"
+                narrow-indicator
+                v-model="iActiveTab"
             >
                 <q-tab 
                     v-for="(oItem, iIndex) in aRepositories" 
-                    :name="oItem.sName"
-                    :active="sActiveTabName == oItem.sName"
+                    :name="iIndex"
+                    :active="iActiveTab == iIndex"
                 >
                     <template slot="default">
                         <div
@@ -23,28 +26,31 @@
                     </template>
                 </q-tab>
             </q-tabs>
-            <q-btn-group outline>
-                <q-btn outline icon="add" />
-                <q-btn outline icon="create" :disable="sActiveTabName == ''"/>
-                <q-btn outline icon="settings" />
+            <q-btn-group flat>
+                <q-btn icon="add" />
+                <q-btn icon="create" :disable="iActiveTab == -1"/>
+                <q-btn icon="settings" />
             </q-btn-group>
         </div>
         
         <q-separator />
 
         <q-tab-panels 
-            v-model="sActiveTabName" 
+            v-model="iActiveTab" 
             animated
-        >
+        >123
+            <template slot="default">
+                No repository selected..
+            </template>
             <q-tab-panel 
                 v-for="(oItem, iIndex) in aRepositories" 
-                :name="oItem.sName"
+                :name="iIndex"
             >
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 <repository-tab-content
                     :oRepository="oItem"
                     :iIndex="iIndex"
-                    :bActive="sActiveTabName == oItem.sName"
+                    :bActive="iActiveTab == iIndex"
                 >
                 </repository-tab-content>
             </q-tab-panel>
@@ -72,8 +78,6 @@ export default {
     data: function()
     {
         return {
-            sActiveTabName: '',
-            
             sNewRepositoryFieldState: '',
             sNewRepositoryInvalidFeedback: '',
             sRepositoryURL: '',
@@ -199,6 +203,7 @@ export default {
         },
         fnResetNewRepositoryModal: function()
         {
+            console.log('fnResetNewRepositoryModal');
             this.sNewRepositoryFieldState = '';
             this.sNewRepositoryInvalidFeedback = '';
             this.sRepositoryURL = '';
@@ -230,6 +235,7 @@ export default {
         },
         fnNewRepositoryFormSubmit: function(oEvent)
         {
+            console.log('fnNewRepositoryFormSubmit');
             oEvent.preventDefault();
             
             if (!this.fnCheckNewRepositoryForm()) {
@@ -244,7 +250,8 @@ export default {
         },
         fnSelectTab: function(iIndex)
         {
-            this.iActiveTab = iIndex;
+            console.log('fnSelectTab', iIndex);
+            console.log('this.iActiveTab', this.iActiveTab);
             localStorage.setItem('iActiveTab', iIndex);
         }
     },
@@ -260,6 +267,7 @@ export default {
         console.log('PageIndex mounted');
         this.iActiveTab = localStorage.getItem('iActiveTab');
         //this.fnGetRepositories();
+        console.log('this.iActiveTab', this.iActiveTab);
     }
 }
 </script>
