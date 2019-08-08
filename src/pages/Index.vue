@@ -5,6 +5,7 @@
                 @input="fnSelectTab"
                 align="left"
                 narrow-indicator
+                inline-label
                 v-model="iActiveTab"
             >
                 <q-tab 
@@ -38,9 +39,6 @@
             v-model="iActiveTab" 
             animated
         >
-            <template slot="default">
-                No repository selected..
-            </template>
             <q-tab-panel 
                 v-for="(oItem, iIndex) in aRepositories" 
                 :name="iIndex"
@@ -103,8 +101,19 @@ export default {
                         "article1",
                         "articles2"
                     ]
+                },
+                {
+                    sName: "test2",
+                },
+                {
+                    sName: "test3",
+                },
+                {
+                    sName: "test4",
+                },
+                {
+                    sName: "test5",
                 }
-            
             ]
         };
     },
@@ -124,7 +133,8 @@ export default {
         },
         fnCloseTab: function(iIndex)
         {
-            console.log('fnCloseTab');
+            console.log('fnCloseTab', arguments);
+            /*
             this
                 .$http
                 .post(
@@ -146,6 +156,7 @@ export default {
                 {
                     this.$snotify.error(sError);
                 });
+            */
         },
         fnGetRepositories: function()
         {
@@ -274,7 +285,7 @@ export default {
     mounted: function()
     {
         console.log('PageIndex mounted');
-        //this.iActiveTab = localStorage.getItem('iActiveTab');
+        this.iActiveTab = localStorage.getItem('iActiveTab')*1;
         //this.fnGetRepositories();
         console.log('this.iActiveTab', this.iActiveTab);
     }
