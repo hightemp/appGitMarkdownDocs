@@ -55,7 +55,9 @@ module.exports = function (ctx) {
         'QIcon',
         'QBtnGroup',
         'QBadge',
-        'QInput'
+        'QInput',
+        'QSpinner',
+        'QSpinnerGears'
       ],
 
       directives: [

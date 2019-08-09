@@ -30,6 +30,8 @@
             <q-btn-group flat>
                 <q-btn @click="fnShowAddWindow" icon="add" />
                 <q-btn @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
+                <q-btn @click="fnPush" icon="arrow_upward" />
+                <q-btn @click="fnPull" icon="arrow_downward" />
                 <q-btn @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
@@ -45,6 +47,7 @@
                     :name="iIndex"
                 >
                     <repository-tab-content
+                        :ref="'repository_component_'+iIndex"
                         :oRepository="oItem"
                         :iIndex="iIndex"
                         :bActive="iActiveTab == iIndex"
@@ -53,6 +56,18 @@
                 </q-tab-panel>
             </q-tab-panels>
         </div>
+
+        <div 
+            v-show="bShowLoadingScreen"
+        >
+            <div class="loading-screen row content-center justify-center">
+                <q-spinner-gears
+                    color="light-blue"
+                    size="200px"
+                    :thickness="2"
+                />
+            </div>
+        </div>        
     </div>
 </template>
 
@@ -95,7 +110,7 @@ export default {
                             "article1"
                         ],
                         "tag2": [
-                            "articles2"
+                            "article2"
                         ],
                         "tag3": [],
                         "tag4": [],
@@ -122,7 +137,8 @@ export default {
                     },
                     aArticles: [
                         "article1",
-                        "articles2"
+                        "article2",
+                        "article3",
                     ]
                 },
                 {
@@ -142,6 +158,20 @@ export default {
     },
   
     methods: {
+        fnPush: function()
+        {
+            console.log('fnPush');
+            this.$nextTick(function() {
+                this.$refs['repository_component_'+this.iActiveTab][0].fnPushRepository();
+            });            
+        },
+        fnPull: function()
+        {
+            console.log('fnPull');
+            this.$nextTick(function() {
+                this.$refs['repository_component_'+this.iActiveTab][0].fnPullRepository();
+            });            
+        },        
         fnShowAddWindow: function()
         {
             console.log('fnShowAddWindow');
@@ -295,7 +325,9 @@ export default {
         {
             console.log('fnSelectTab', iIndex);
             console.log('this.iActiveTab', this.iActiveTab);
+                        
             localStorage.setItem('iActiveTab', iIndex);
+            this.iActiveTab = iIndex;
         }
     },
     
@@ -308,7 +340,7 @@ export default {
     mounted: function()
     {
         console.log('PageIndex mounted');
-        this.iActiveTab = localStorage.getItem('iActiveTab')*1;
+        this.fnSelectTab(localStorage.getItem('iActiveTab')*1);
         //this.fnGetRepositories();
         console.log('this.iActiveTab', this.iActiveTab);
     }
