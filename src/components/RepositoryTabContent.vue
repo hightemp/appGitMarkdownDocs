@@ -64,8 +64,19 @@
                         clickable 
                         v-ripple
                         active-class="list-active-item"
-                        v-for="(aItem, sKey) in oRepository.oPinndedTags"
-                        :active="aSelectedTags.indexOf(sKey)!=-1"
+                        v-for="(sTag, iKey) in oSettings.aPinnedTags"
+                        :active="aSelectedTags.indexOf(sTag)!=-1"
+                        v-if="
+                            (
+                                sTagFilterString=='' 
+                                || (
+                                    sTagFilterString!='' 
+                                    && sTag.toLowerCase().indexOf(sTagFilterString.toLowerCase())!=-1
+                                )
+                            )
+                        "
+                        @click="fnSelectTag(sTag, true)"
+                        @dblclick="fnSelectTag(sTag)"                        
                     >
                         <q-item-section left side>
                             <q-icon name="bookmark" />
@@ -95,6 +106,19 @@
                         active-class="list-active-item"
                         v-for="(aItem, sKey) in oRepository.oTags"
                         :active="aSelectedTags.indexOf(sKey)!=-1"
+                        v-if="
+                            (
+                                sTagFilterString=='' 
+                                || (
+                                    sTagFilterString!='' 
+                                    && sKey.toLowerCase().indexOf(sTagFilterString.toLowerCase())!=-1
+                                )
+                            )
+                            && oSettings.aPinnedTags.indexOf(sKey)==-1
+                            && fnDoTagsHaveCollisions(sKey)
+                        "
+                        @click="fnSelectTag(sKey, true)"
+                        @dblclick="fnSelectTag(sKey)"
                     >
                         <q-item-section>
                             <q-item-label>{{ sKey }}</q-item-label>
@@ -136,6 +160,33 @@
                         active-class="list-active-item"
                         v-for="(sItem, iIndex) in aArticles"
                         :active="iActiveArticle==iIndex"
+                        v-if="sArticleFilterString=='' 
+                            || (
+                                (
+                                    sArticleFilterString!=''
+                                    && sArticleFilterString[0]=='%'
+                                    && aArticlesSearchResults.indexOf(sItem)!=-1
+                                )
+                                || (
+                                    sArticleFilterString!=''
+                                    && sArticleFilterString[0]=='#'
+                                    && sArticleFilterString[1]=='#'
+                                    && !fnCountArticleInTags(sItem)
+                                    && sItem.toLowerCase().indexOf(sArticleFilterString.replace(/^##/,'').toLowerCase())!=-1
+                                )
+                                || (
+                                    sArticleFilterString!='' 
+                                    && (
+                                        sArticleFilterString[0]!='%' 
+                                        || (
+                                            sArticleFilterString[0]!='#'
+                                            && sArticleFilterString[1]!='#'
+                                        )
+                                    )
+                                    && sItem.toLowerCase().indexOf(sArticleFilterString.toLowerCase())!=-1
+                                )
+                            )"
+                        @click="fnSelectArticle(iIndex)"                        
                     >
                         <q-item-section>
                             <q-item-label>{{ sItem }}</q-item-label>
