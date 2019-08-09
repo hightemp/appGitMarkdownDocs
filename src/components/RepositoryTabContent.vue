@@ -59,7 +59,9 @@
                     </q-item-section>
                 </q-item>
                 
-                <q-separator />
+                <q-separator 
+                    v-if="oSettings.aPinnedTags.length"
+                />
                 
                 <q-list separator>
                     <q-item 

@@ -36,8 +36,6 @@
             </q-btn-group>
         </div>
         
-        <q-separator />
-
         <div id="indexpage-tabs-panel">
             <q-tab-panels 
                 v-model="iActiveTab" 
@@ -152,6 +150,12 @@ export default {
                 },
                 {
                     sName: "test5",
+                },
+                {
+                    sName: "test6",
+                },
+                {
+                    sName: "test7",
                 }
             ]
         };
