@@ -4,6 +4,7 @@
             <q-tabs
                 @input="fnSelectTab"
                 align="left"
+                dense
                 narrow-indicator
                 inline-label
                 v-model="iActiveTab"

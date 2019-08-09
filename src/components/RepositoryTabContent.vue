@@ -17,6 +17,25 @@
                 class="pinned-tags-group" 
                 ref="pinned_tags_group"
             >
+                <q-item 
+                        clickable 
+                        v-ripple
+                        active-class="list-active-item"
+                        :active="sActiveTag=='__all__'"
+                    >
+                    <q-item-section left side>
+                        <q-icon name="label" />
+                    </q-item-section>
+
+                    <q-item-section>
+                        <q-item-label>All</q-item-label>
+                    </q-item-section>
+
+                    <q-item-section side>
+                        <q-badge label="10k" />
+                    </q-item-section>
+                </q-item>
+                
                 <q-list separator>
                     <q-item 
                         clickable 
@@ -25,6 +44,10 @@
                         v-for="(aItem, sKey) in oRepository.oPinndedTags"
                         :active="aSelectedTags.indexOf(sKey)!=-1"
                     >
+                        <q-item-section left side>
+                            <q-icon name="bookmark" />
+                        </q-item-section>
+                        
                         <q-item-section>
                             <q-item-label>{{ sKey }}</q-item-label>
                         </q-item-section>
@@ -63,6 +86,40 @@
                 
         </div>
         <div class="articles-panel">
+            <div class="list-filter-panel">
+                <q-input 
+                    dense 
+                    square 
+                    filled 
+                    v-model="sArticleFilterString" 
+                    label="Filter tags"
+                >
+                    <template v-slot:append>
+                        <q-icon v-if="sArticleFilterString != ''" name="clear" class="cursor-pointer" @click="sArticleFilterString = ''" />
+                    </template>
+                </q-input>
+                <div class="list-filter-panel-buttons-panel">
+                    <q-btn square flat icon="add" />
+                </div>
+            </div>
+
+            <div 
+                class="articles-list-group" 
+            >
+                <q-list separator>
+                    <q-item 
+                        clickable 
+                        v-ripple
+                        active-class="list-active-item"
+                        v-for="(sItem, iIndex) in aArticles"
+                        :active="iActiveArticle==iIndex"
+                    >
+                        <q-item-section>
+                            <q-item-label>{{ sItem }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </div>
             
         </div>
         <div class="editor-panel">
