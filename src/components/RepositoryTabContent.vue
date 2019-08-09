@@ -18,11 +18,12 @@
                 ref="pinned_tags_group"
             >
                 <q-item 
-                        clickable 
-                        v-ripple
-                        active-class="list-active-item"
-                        :active="sActiveTag=='__all__'"
-                    >
+                    clickable 
+                    v-ripple
+                    active-class="list-active-item"
+                    :active="sActiveTag=='__all__'"
+                    @click="fnSelectTag('__all__')"
+                >
                     <q-item-section left side>
                         <q-icon name="label" />
                     </q-item-section>
@@ -39,11 +40,12 @@
                 <q-separator />
                 
                 <q-item 
-                        clickable 
-                        v-ripple
-                        active-class="list-active-item"
-                        :active="sActiveTag=='__untagged__'"
-                    >
+                    clickable 
+                    v-ripple
+                    active-class="list-active-item"
+                    :active="sActiveTag=='__untagged__'"
+                    @click="fnSelectTag('__untagged__')"
+                >
                     <q-item-section left side>
                         <q-icon name="label_off" />
                     </q-item-section>
