@@ -1,6 +1,21 @@
 // app global css
 
+html, body {
+    height: 100%;
+}
+
+#q-app {
+    height: 100%;
+}
+
+#q-app > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 #indexpage-top-panel {
+    flex: 1 1 60px;
     display: flex;
 }
 
@@ -18,4 +33,94 @@
 .tab-close-button {
     pointer-events: all !important;
     width: 30px
+}
+
+.repository-panel {
+    display: flex;
+    height: 100%;
+}
+
+.tags-panel {
+    flex: 1 1 25%;
+    height: 100%;
+    border-right: 1px solid rgba(0,0,0,0.12);
+    display: flex;
+    flex-direction: column;
+}
+
+.articles-panel {
+    flex: 1 1 25%;
+    height: 100%;
+    border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+.editor-panel {
+    flex: 1 1 25%;
+    height: 100%;
+    border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+.viewer-panel {
+    flex: 1 1 25%;
+    height: 100%;
+}
+
+#indexpage-tabs-panel {
+    flex: 1 1 100%;
+}
+
+#indexpage-tabs-panel > .q-tab-panels {
+    height: 100%;
+}
+
+#indexpage-tabs-panel > .q-tab-panels > .q-panel {
+    height: 100%;
+}
+
+#indexpage-tabs-panel > .q-tab-panels > .q-panel > .q-tab-panel {
+    height: 100%;
+    padding: 0px;
+}
+
+.list-active-item {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.list-active-item .q-badge {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.list-filter-panel {
+    display: flex;
+    flex-direction: row;
+}
+
+.list-filter-panel .q-field {
+    flex: 1 1 100%;
+}
+
+.list-filter-panel-buttons-panel {
+    flex: 1 1 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.tags-panel > .list-filter-panel {
+}
+
+.tags-panel > .q-separator {
+    height: 1px;
+    flex: none;
+}
+
+.pinned-tags-group {
+}
+
+.tags-list-group {
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: 0px;
 }

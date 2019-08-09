@@ -35,23 +35,23 @@
         
         <q-separator />
 
-        <q-tab-panels 
-            v-model="iActiveTab" 
-            animated
-        >
-            <q-tab-panel 
-                v-for="(oItem, iIndex) in aRepositories" 
-                :name="iIndex"
+        <div id="indexpage-tabs-panel">
+            <q-tab-panels 
+                v-model="iActiveTab" 
             >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                <repository-tab-content
-                    :oRepository="oItem"
-                    :iIndex="iIndex"
-                    :bActive="iActiveTab == iIndex"
+                <q-tab-panel 
+                    v-for="(oItem, iIndex) in aRepositories" 
+                    :name="iIndex"
                 >
-                </repository-tab-content>
-            </q-tab-panel>
-        </q-tab-panels>
+                    <repository-tab-content
+                        :oRepository="oItem"
+                        :iIndex="iIndex"
+                        :bActive="iActiveTab == iIndex"
+                    >
+                    </repository-tab-content>
+                </q-tab-panel>
+            </q-tab-panels>
+        </div>
     </div>
 </template>
 
@@ -95,7 +95,29 @@ export default {
                         ],
                         "tag2": [
                             "articles2"
-                        ]
+                        ],
+                        "tag3": [],
+                        "tag4": [],
+                        "tag5": [],
+                        "tag6": [],
+                        "tag7": [],
+                        "tag8": [],
+                        "tag9": [],
+                        "tag10": [],
+                        "tag11": [],
+                        "tag12": [],
+                        "tag13": [],
+                        "tag14": [],
+                        "tag15": [],
+                        "tag16": [],
+                        "tag17": [],
+                    },
+                    oPinndedTags: {
+                        "tag3": [],
+                        "tag4": [],
+                        "tag5": [],
+                        "tag6": [],
+                        "tag7": [],                        
                     },
                     aArticles: [
                         "article1",
