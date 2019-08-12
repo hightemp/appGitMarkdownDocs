@@ -19,15 +19,47 @@ export default {
     {
         return {
             sConfigurationFileName: '.appGitMarkdownDocs.json',
-            sConfigurationFilePath: '',
-            sRepositoriesDirName: '.appGitMarkdownDocs_repositories',
-            sRepositoriesDirPath: '',
-            oConfiguration: null
+            sConfigurationFilePath: path.join(os.homedir(), '.appGitMarkdownDocs.json'),
+            oConfiguration: null,
+            oDefaultConfiguration: {
+                sRepositoriesDirName: '.appGitMarkdownDocs_repositories',
+                sRepositoriesDirPath: path.join(os.homedir(), '.appGitMarkdownDocs_repositories'),                
+            }
         }
     },
     
     methods: {
-        
+        fnSaveConfiguration: function()
+        {
+            fs.writeFileSync(this.sConfigurationFilePath, JSON.stringify(this.oConfiguration));
+        },
+        fnLoadConfiguration: function()
+        {
+            var bCreateFile = false;
+            
+            try {
+                var sConfigurationFileContents = fs.readFileSync(this.sConfigurationFilePath);
+
+                this.oConfiguration = JSON.parse(sConfigurationFileContents);
+            } catch(oException) {
+                this.$q.notify({
+                    color: 'negative', 
+                    message: `The settings file ('${this.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
+                    icon: 'report_problem'
+                });
+            }
+
+            if (!this.oConfiguration) {
+                this.oConfiguration = {};
+                bCreateFile = true;
+            }
+            
+            this.oConfiguration = Object.assign(this.oDefaultConfiguration, this.oConfiguration);
+            
+            if (bCreateFile) {
+                this.fnSaveConfiguration();
+            }
+        }
     },
     
     created: function()
@@ -41,46 +73,31 @@ export default {
             actions: [{ icon: 'close', color: 'white' }]
         })
         
-        this.sConfigurationFilePath = path.join(os.homedir(), this.sConfigurationFileName);
         console.log('Configuration file path', this.sConfigurationFilePath);
         
-        try {
-            var sConfigurationFileContents = fs.readFileSync(this.sConfigurationFilePath);
+        this.fnLoadConfiguration();
         
-            this.oConfiguration = JSON.parse(sConfigurationFileContents);
-        } catch(oException) {
-            this.$q.notify({
-                color: 'negative', 
-                message: `The settings file ('${this.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
-                icon: 'report_problem'
-            });
-        }
+        console.log('Configuration', this.oConfiguration);
+        console.log('Repositories dir path', this.oConfiguration['sRepositoriesDirPath'], fs.existsSync(this.oConfiguration['sRepositoriesDirPath']));
         
-        if (!this.oConfiguration) {
-            this.oConfiguration = {};
-        }
+        var sRepositoriesDirPath = this.oConfiguration['sRepositoriesDirPath'];
         
-        this.sRepositoriesDirName = this.oConfiguration['sRepositoriesDirName'] ? this.oConfiguration['sRepositoriesDirName'] : this.sRepositoriesDirName;
-        this.sRepositoriesDirPath = this.oConfiguration['sRepositoriesDirPath'] ? this.oConfiguration['sRepositoriesDirPath'] : path.join(os.homedir(), this.sRepositoriesDirName);
-        
-        console.log('Repositories dir path', this.sRepositoriesDirPath, fs.existsSync(this.sRepositoriesDirPath));
-        
-        if (!fs.existsSync(this.sRepositoriesDirPath)) {
-            console.log('Repositories dir not found', this.sRepositoriesDirPath);
+        if (!fs.existsSync(sRepositoriesDirPath)) {
+            console.log('Repositories dir not found', sRepositoriesDirPath);
             try {
-                fs.mkdirSync(this.sRepositoriesDirPath, { recursive: true });
+                fs.mkdirSync(sRepositoriesDirPath, { recursive: true });
             } catch(oException) {
-                console.log('Repositories dir couldn\'t be created', this.sRepositoriesDirPath);
+                console.log('Repositories dir couldn\'t be created', sRepositoriesDirPath);
                 this.$q.notify({
                     color: 'negative', 
-                    message: `It is not possible to create a directory ('${this.sRepositoriesDirPath}')`, 
+                    message: `It is not possible to create a directory ('${sRepositoriesDirPath}')`, 
                     icon: 'report_problem'
                 });
             } finally {
-                console.log('Repositories dir created', this.sRepositoriesDirPath);
+                console.log('Repositories dir created', sRepositoriesDirPath);
                 this.$q.notify({
                     color: 'positive', 
-                    message: `Created directory for repositories ('${this.sRepositoriesDirPath}')`, 
+                    message: `Created directory for repositories ('${sRepositoriesDirPath}')`, 
                     icon: 'check'
                 });
             }
