@@ -55,7 +55,7 @@
                     </q-item-section>
 
                     <q-item-section side>
-                        <q-badge label="10k" />
+                        <q-badge :label="fnGetArticlesCountByTagName('__untagged__')" />
                     </q-item-section>
                 </q-item>
                 
@@ -446,7 +446,7 @@ export default {
         },
         aArticles: function() 
         {
-            console.log('aArticles', this.oRepository.aArticles, this.oRepository.oTags[this.sActiveTag]);
+            console.log('aArticles', this.oRepository.aArticles, this.sActiveTag, this.oRepository.oTags[this.sActiveTag]);
             
             if (this.aSelectedTags.length>1) {
                 return this.fnGetSelectedTagsArticles();
@@ -454,6 +454,10 @@ export default {
 
             if (this.sActiveTag=="__all__") {
                 return this.oRepository.aArticles;
+            }
+            
+            if (this.sActiveTag=="__untagged__") {
+                return this.fnGetUntaggedArticles();
             }
             
             if (typeof this.oRepository.oTags[this.sActiveTag] === 'undefined') {
@@ -722,6 +726,10 @@ export default {
                 return false;
             }
 
+            if (this.sActiveTag=="__untagged__") {
+                return false;
+            }
+
             if (!confirm("Delete tag '"+this.sActiveTag+"'?")) {
                 return;
             }
@@ -762,8 +770,10 @@ export default {
                     window.oApplication.bShowLoadingScreen = false;
                 });
         },
-        fnGetSelectedTagsArticles(sWithTag)
+        fnGetSelectedTagsArticles: function(sWithTag)
         {
+            console.log("fnGetSelectedTagsArticles", sWithTag);
+            
             var aResult = [];            
             var aSelectedTags = [];
             
@@ -775,7 +785,7 @@ export default {
                 aSelectedTags.push(sWithTag);
             }
             
-            aResult = [];
+            console.log("fnGetSelectedTagsArticles aSelectedTags", aSelectedTags);
             
             var aSelectedTagArticles = this.oRepository.oTags[aSelectedTags[0]];
             
@@ -796,11 +806,18 @@ export default {
                 }
             }
             
+            console.log("fnGetSelectedTagsArticles return", aResult);
             return aResult;
         },
-        fnDoTagsHaveCollisions(sTag)
+        fnDoTagsHaveCollisions: function(sTag)
         {
+            console.log("fnDoTagsHaveCollisions");
+            
             if (this.sActiveTag=='__all__') {
+                return true;
+            }
+            
+            if (this.sActiveTag=='__untagged__') {
                 return true;
             }
             
@@ -1151,6 +1168,28 @@ export default {
             
             return aResult;
         },
+        fnCountUntaggedArticles: function()
+        {
+            return this.fnGetUntaggedArticles().length;
+        },
+        fnGetUntaggedArticles: function()
+        {
+            var aResult = [];
+            
+            fnCountArticlesWithoutTags_cycle1:
+            for (var sArticle of this.oRepository.aArticles) {
+                for (var sTag in this.oRepository.oTags) {
+                    var iIndex = this.oRepository.oTags[sTag].indexOf(sArticle);
+
+                    if (iIndex>-1) {
+                        continue fnCountArticlesWithoutTags_cycle1;
+                    }
+                }
+                aResult.push(sArticle);
+            }
+            
+            return aResult;
+        },
         fnCountArticleInTags: function(sArticle)
         {
             return this.fnFindArticleInTags(sArticle).length;
@@ -1177,14 +1216,18 @@ export default {
             if (sTag=='__all__') {
                 return this.oRepository.aArticles.length;
             }
-            
+
+            if (sTag=='__untagged__') {
+                return this.fnCountUntaggedArticles();
+            }
+        
             return this.oRepository.oTags[sTag].length;
         },
         fnSelectTag: function(sTagName, bAddToSelection)
         {
             this.iActiveArticle = -1;
             
-            if (bAddToSelection && this.sActiveTag != '__all__') {
+            if (bAddToSelection && this.sActiveTag != '__all__' && this.sActiveTag != '__untagged__') {
                 var iIndex = this.aSelectedTags.indexOf(sTagName);
                 
                 if (iIndex != -1) {
