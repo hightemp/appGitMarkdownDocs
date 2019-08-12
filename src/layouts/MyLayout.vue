@@ -6,11 +6,11 @@
 import { openURL } from 'quasar'
 
 export default {
-  name: 'MyLayout',
-  
-  methods: {
-    openURL
-  }
+    name: 'MyLayout',
+
+    methods: {
+        openURL
+    }
 }
 </script>
 

@@ -150,7 +150,39 @@
                     </template>
                 </q-input>
                 <div class="list-filter-panel-buttons-panel">
-                    <q-btn square flat icon="add" />
+                    <q-btn-dropdown 
+                        dense
+                        flat
+                    >
+                        <q-list>
+                            <q-item clickable v-close-popup @click="fnShowNewArticleModal">
+                                <q-item-section side-left>
+                                    <q-avatar icon="add"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>Add</q-item-label>
+                                </q-item-section>
+                            </q-item>
+
+                            <q-item clickable v-close-popup @click="fnShowRenameArticleModal">
+                                <q-item-section avatar>
+                                    <q-avatar icon="create"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>Edit</q-item-label>
+                                </q-item-section>
+                            </q-item>
+
+                            <q-item clickable v-close-popup @click="fnRemoveArticle()">
+                                <q-item-section avatar>
+                                    <q-avatar icon="trash"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>Remove</q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-btn-dropdown>
                 </div>
             </div>
 
