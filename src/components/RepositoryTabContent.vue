@@ -9,7 +9,47 @@
                     </template>
                 </q-input>
                 <div class="list-filter-panel-buttons-panel">
-                    <q-btn square flat icon="add" />
+                    <q-btn-dropdown 
+                        dense
+                        flat
+                    >
+                        <q-list>
+                            <q-item clickable @click="fnShowNewTagModal">
+                                <q-item-section avatar>
+                                    <q-icon name="add"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    Add
+                                </q-item-section>
+                            </q-item>
+
+                            <q-item 
+                                clickable 
+                                @click="fnShowRenameTagModal"
+                                :disabled="sActiveTag=='__all__'"
+                            >
+                                <q-item-section avatar>
+                                    <q-icon name="create"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    Edit
+                                </q-item-section>
+                            </q-item>
+
+                            <q-item 
+                                clickable 
+                                @click="fnRemoveTag()"
+                                :disabled="sActiveTag=='__all__'"
+                            >
+                                <q-item-section avatar>
+                                    <q-icon name="delete"/>
+                                </q-item-section>
+                                <q-item-section>
+                                    Remove
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-btn-dropdown>                    
                 </div>
             </div>
 
@@ -155,30 +195,38 @@
                         flat
                     >
                         <q-list>
-                            <q-item clickable v-close-popup @click="fnShowNewArticleModal">
-                                <q-item-section side-left>
-                                    <q-avatar icon="add"/>
+                            <q-item clickable @click="fnShowNewArticleModal">
+                                <q-item-section avatar>
+                                    <q-icon name="add"/>
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label>Add</q-item-label>
+                                    Add
                                 </q-item-section>
                             </q-item>
 
-                            <q-item clickable v-close-popup @click="fnShowRenameArticleModal">
+                            <q-item 
+                                clickable 
+                                @click="fnShowRenameArticleModal"
+                                :disabled="!fnArticleExists()"
+                            >
                                 <q-item-section avatar>
-                                    <q-avatar icon="create"/>
+                                    <q-icon name="create"/>
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label>Edit</q-item-label>
+                                    Edit
                                 </q-item-section>
                             </q-item>
 
-                            <q-item clickable v-close-popup @click="fnRemoveArticle()">
+                            <q-item 
+                                clickable 
+                                @click="fnRemoveArticle()"
+                                :disabled="!fnArticleExists()"
+                            >
                                 <q-item-section avatar>
-                                    <q-avatar icon="trash"/>
+                                    <q-icon name="delete"/>
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label>Remove</q-item-label>
+                                    Remove
                                 </q-item-section>
                             </q-item>
                         </q-list>

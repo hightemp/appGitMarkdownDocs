@@ -58,7 +58,8 @@ module.exports = function (ctx) {
         'QBadge',
         'QInput',
         'QSpinner',
-        'QSpinnerGears'
+        'QSpinnerGears',
+        'QAvatar'
       ],
 
       directives: [
