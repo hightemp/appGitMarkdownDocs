@@ -26,7 +26,7 @@
                             <q-item 
                                 clickable 
                                 @click="fnShowRenameTagModal"
-                                :disabled="sActiveTag=='__all__'"
+                                :disabled="sActiveTag=='__all__' || sActiveTag=='__untagged__'"
                             >
                                 <q-item-section avatar>
                                     <q-icon name="create"/>
@@ -39,7 +39,7 @@
                             <q-item 
                                 clickable 
                                 @click="fnRemoveTag()"
-                                :disabled="sActiveTag=='__all__'"
+                                :disabled="sActiveTag=='__all__' || sActiveTag=='__untagged__'"
                             >
                                 <q-item-section avatar>
                                     <q-icon name="delete"/>
