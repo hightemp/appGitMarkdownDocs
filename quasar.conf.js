@@ -59,7 +59,8 @@ module.exports = function (ctx) {
         'QInput',
         'QSpinner',
         'QSpinnerGears',
-        'QAvatar'
+        'QAvatar',
+        'QInnerLoading'
       ],
 
       directives: [

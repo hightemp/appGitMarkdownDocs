@@ -28,11 +28,11 @@
                 </q-tab>
             </q-tabs>
             <q-btn-group flat>
-                <q-btn @click="fnShowAddWindow" icon="add" />
-                <q-btn @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
-                <q-btn @click="fnPush" icon="arrow_upward" />
-                <q-btn @click="fnPull" icon="arrow_downward" />
-                <q-btn @click="fnShowSettings" icon="settings" />
+                <q-btn dense @click="fnShowAddWindow" icon="add" />
+                <q-btn dense @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnPush" icon="arrow_upward" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnPull" icon="arrow_downward" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
         
@@ -219,6 +219,7 @@ export default {
         fnGetRepositories: function()
         {
             console.log('fnGetRepositories');
+            /*
             this.bShowLoadingScreen = true;
             
             this
@@ -244,10 +245,12 @@ export default {
                     this.$snotify.error(sError);
                     this.bShowLoadingScreen = false;
                 });
+            */
         },
         fnAddRepository: function()
         {
             console.log('fnAddRepository');
+            /*
             this.bShowAddRepositoryButtonSpinner = true;
             
             this
@@ -278,6 +281,7 @@ export default {
                     this.$snotify.error(sError);
                     this.bShowAddRepositoryButtonSpinner = false;
                 });
+            */
         },
         fnResetNewRepositoryModal: function()
         {
