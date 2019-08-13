@@ -60,11 +60,18 @@ module.exports = function (ctx) {
         'QSpinner',
         'QSpinnerGears',
         'QAvatar',
-        'QInnerLoading'
+        'QInnerLoading',
+        'QDialog',
+        'QCard',
+        'QCardSection',
+        'QCardActions',
+        'QForm'
       ],
 
       directives: [
-        'Ripple'
+        'Ripple',
+        'ClosePopup',
+        'Scroll'
       ],
 
       // Quasar plugins

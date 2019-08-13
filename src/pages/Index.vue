@@ -28,8 +28,8 @@
                 </q-tab>
             </q-tabs>
             <q-btn-group flat>
-                <q-btn dense @click="fnShowAddWindow" icon="add" />
-                <q-btn dense @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnShowAddRepositoryWindow()" icon="add" />
+                <q-btn dense @click="fnShowEditRepositoryWindow()" icon="create" :disable="iActiveTab == -1"/>
                 <q-btn dense @click="fnPushRepository" icon="arrow_upward" :disable="iActiveTab == -1"/>
                 <q-btn dense @click="fnPullRepository" icon="arrow_downward" :disable="iActiveTab == -1"/>
                 <q-btn-dropdown 
@@ -87,45 +87,96 @@
                 </q-tab-panel>
             </q-tab-panels>
         </div>
+        
+        <q-dialog v-model="bShowAddRepositoryWindow">
+            <q-card style="width: 700px; max-width: 80vw;">
+                <q-card-section>
+                    <div class="text-h6">Create new repository</div>
+                </q-card-section>
 
-        <div 
-            v-show="bShowLoadingScreen"
-        >
-            <div class="loading-screen row content-center justify-center">
-                <q-spinner-gears
-                    color="light-blue"
-                    size="200px"
-                    :thickness="2"
-                />
-            </div>
-        </div>        
+                <q-separator />
+
+                <q-form ref="AddRepositoryWindowForm" @submit.prevent.stop="fnAddRepository" @reset.prevent.stop="fnResetNewRepostoryWindow">
+                    <q-card-section>
+                        <q-input 
+                            filled
+                            v-model="oNewRepositoryWindow.sName" 
+                            label="Name" 
+                            :rules="[ 
+                                fnValidateRepositoryName,
+                                fnValidateIsEmpty
+                            ]"
+                        />
+                        <q-input 
+                            filled
+                            v-model="oNewRepositoryWindow.sURL" 
+                            label="Git repository URL" 
+                            placeholder="https://github.com/hightemp/appGitMarkdownDocs.git"
+                            :rules="[ 
+                                fnValidateRepositoryURL,
+                                fnValidateIsEmpty
+                            ]"
+                        />
+                        
+                        <user-selector 
+                            v-model="oNewRepositoryWindow.iUserIndex"
+                            :aUsers="aUsers"
+                        />
+                    </q-card-section>
+
+                    <q-separator />
+
+                    <q-card-actions align="right">
+                        {{ fnValidateAddRepositoryForm() }}
+                        <q-btn flat label="Cancel" color="primary" v-close-popup />
+                        <q-btn 
+                            :disabled="fnValidateAddRepositoryForm()"
+                            flat 
+                            label="Create" 
+                            color="primary" 
+                            v-close-popup 
+                            type="submit" 
+                        />
+                    </q-card-actions>
+                </q-form>
+                    
+            </q-card>
+        </q-dialog>
     </div>
 </template>
 
 <script>
     
-import { openURL } from 'quasar'
 import RepositoryTabContent from '../components/RepositoryTabContent.vue'
+import UserSelector from '../components/UserSelector.vue'
 import Vue, { VueConstructor } from 'vue'
-import OS from 'os'
 
 export default {
     name: 'PageIndex',
 
     components: {
-        'repository-tab-content' : RepositoryTabContent
+        'repository-tab-content': RepositoryTabContent,
+        'user-selector': UserSelector
     },
 
     data: function()
     {
         return {
+            oNewRepositoryWindow: {
+                bValid: false,
+                sName: "",
+                sURL: "",
+                iUserIndex: 0
+            },
+            
             sNewRepositoryFieldState: '',
             sNewRepositoryInvalidFeedback: '',
             sRepositoryURL: '',
             
-            bShowAddRepositoryButtonSpinner: false,
+            bShowAddRepositoryWindow: false,
+            bShowEditRepositoryWindow: false,
             
-            bShowLoadingScreen: false,
+            bShowAddRepositoryButtonSpinner: false,
             
             iActiveTab: -1,
             
@@ -134,6 +185,12 @@ export default {
                     sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
                     sUserName: 'testuser',
                     sEmail: 'test@test.com',
+                    sPassword: '123456'
+                },
+                {
+                    sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
+                    sUserName: 'testuser2',
+                    sEmail: 'test2@test.com',
                     sPassword: '123456'
                 }
             ],
@@ -219,18 +276,60 @@ export default {
                 this.$refs['repository_component_'+this.iActiveTab][0].fnPullRepository();
             });            
         },
+        
         fnSetUserForCurrentRepository: function(iUserIndex)
         {
-            console.log('fnSetUserForCurrentRepository');
-            this.aRepositories[this.iActiveTab].iUserIndex = iUserIndex;
+            console.log('fnSetUserForCurrentRepository', iUserIndex);
+            Vue.set(this.aRepositories[this.iActiveTab], 'iUserIndex', iUserIndex);
         },
-        fnShowAddWindow: function()
+        
+        fnValidateAddRepositoryForm: function()
         {
-            console.log('fnShowAddWindow');
+            console.log("fnValidateAddRepositoryForm", async function() { return await oThis.$refs.AddRepositoryWindowForm.validate(); });
+            var oThis = this;
+            return async function() { return await oThis.$refs.AddRepositoryWindowForm.validate(); };
         },
-        fnShowEditWindow: function()
+        fnValidateIsEmpty: function(sValue)
         {
-            console.log('fnShowEditWindow');        
+            console.log('fnValidateIsEmpty', sValue);
+            return sValue != '' || 'Can\'t be empty.';
+        },
+        fnValidateRepositoryName: function(sValue)
+        {
+            console.log('fnValidateRepositoryName', sValue);
+            return this.fnFindRepository({ sName: sValue }) == -1 || 'A repository with the same name already exists.';
+        },
+        fnValidateRepositoryURL: function(sValue)
+        {
+            console.log('fnValidateRepositoryURL', sValue);
+            return /^https?:\/\//.test(sValue) || 'Должен быть использован протокол HTTP';
+        },
+        
+        fnFindRepository: function(oParameters = {})
+        {
+            console.log('fnFindRepository', oParameters);
+            fnFindRepository_cycle:
+            for (var iIndex in this.aRepositories) {
+                for (var sParameterName in oParameters) {
+                    if (this.aRepositories[iIndex][sParameterName]!=oParameters[sParameterName]) {
+                        continue fnFindRepository_cycle;
+                    }
+                }
+                return iIndex;
+            }
+            return -1;
+        },
+        fnShowAddRepositoryWindow: function()
+        {
+            console.log('fnShowAddRepositoryWindow');
+            
+            this.bShowAddRepositoryWindow = true;
+        },
+        fnShowEditRepositoryWindow: function()
+        {
+            console.log('fnShowEditRepositoryWindow');        
+            
+            this.bShowEditRepositoryWindow = true;
         },
         fnShowSettings: function()
         {
@@ -330,9 +429,10 @@ export default {
                 });
             */
         },
-        fnResetNewRepositoryModal: function()
+        fnResetNewRepositoryWindow: function()
         {
             console.log('fnResetNewRepositoryModal');
+            /*
             this.sNewRepositoryFieldState = '';
             this.sNewRepositoryInvalidFeedback = '';
             this.sRepositoryURL = '';
@@ -342,10 +442,12 @@ export default {
             setTimeout(function() {
                 oThis.$refs.repository_url.$el.focus();
             }, 300);
+            */
         },
         fnCheckNewRepositoryForm: function()
         {
             console.log('fnCheckNewRepositoryForm');
+            /*
             var bValid = this.$refs.add_new_repository_modal_form.checkValidity();
             
             for (var iIndex in this.aRepositories) {
@@ -361,10 +463,12 @@ export default {
             this.sNewRepositoryFieldState = bValid ? 'valid' : 'invalid';
             
             return bValid;
+            */
         },
         fnNewRepositoryFormSubmit: function(oEvent)
         {
             console.log('fnNewRepositoryFormSubmit');
+            /*
             oEvent.preventDefault();
             
             if (!this.fnCheckNewRepositoryForm()) {
@@ -376,6 +480,7 @@ export default {
             });
             
             this.fnAddRepository();
+            */
         },
         fnSelectTab: function(iIndex)
         {
