@@ -30,8 +30,41 @@
             <q-btn-group flat>
                 <q-btn dense @click="fnShowAddWindow" icon="add" />
                 <q-btn dense @click="fnShowEditWindow" icon="create" :disable="iActiveTab == -1"/>
-                <q-btn dense @click="fnPush" icon="arrow_upward" :disable="iActiveTab == -1"/>
-                <q-btn dense @click="fnPull" icon="arrow_downward" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnPushRepository" icon="arrow_upward" :disable="iActiveTab == -1"/>
+                <q-btn dense @click="fnPullRepository" icon="arrow_downward" :disable="iActiveTab == -1"/>
+                <q-btn-dropdown 
+                    dense
+                    flat
+                    icon="person" 
+                    :disable="iActiveTab == -1"
+                >
+                    <q-list>
+                        <q-item 
+                            v-for="(oUser, iIndex) in aUsers"
+                            :active="aRepositories[iActiveTab].iUserIndex==iIndex"
+                            clickable
+                            @click="fnSetUserForCurrentRepository(iIndex)"
+                        >
+                            <q-item-section avatar>
+                                <q-avatar>
+                                    <img :src="oUser.sAvatarImageURL">
+                                </q-avatar>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>{{ oUser.sUserName }}</q-item-label>
+                                <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <q-item clickable @click="">
+                            <q-item-section avatar>
+                                <q-icon name="add"/>
+                            </q-item-section>
+                            <q-item-section>
+                                Add user
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-btn-dropdown>
                 <q-btn dense @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
@@ -96,12 +129,21 @@ export default {
             
             iActiveTab: -1,
             
+            aUsers: [
+                {
+                    sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
+                    sUserName: 'testuser',
+                    sEmail: 'test@test.com',
+                    sPassword: '123456'
+                }
+            ],
+            
             aRepositories: [
             
                 {
                     sName: "test",
                     sURL: "git@github.com:hightemp/wappGitMarkdownDocs.git",
-                    sUser: '',
+                    iUserIndex: 0,
                     sPath: '',
                     oTags: {
                         "tag1": [
@@ -163,20 +205,25 @@ export default {
     },
   
     methods: {
-        fnPush: function()
+        fnPushRepository: function()
         {
-            console.log('fnPush');
+            console.log('fnPushRepository');
             this.$nextTick(function() {
                 this.$refs['repository_component_'+this.iActiveTab][0].fnPushRepository();
             });            
         },
-        fnPull: function()
+        fnPullRepository: function()
         {
-            console.log('fnPull');
+            console.log('fnPullRepository');
             this.$nextTick(function() {
                 this.$refs['repository_component_'+this.iActiveTab][0].fnPullRepository();
             });            
-        },        
+        },
+        fnSetUserForCurrentRepository: function(iUserIndex)
+        {
+            console.log('fnSetUserForCurrentRepository');
+            this.aRepositories[this.iActiveTab].iUserIndex = iUserIndex;
+        },
         fnShowAddWindow: function()
         {
             console.log('fnShowAddWindow');
