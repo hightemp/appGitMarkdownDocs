@@ -1,0 +1,143 @@
+<template>
+    <q-dialog v-if="bShowAddRepositoryWindow" v-model="bShowAddRepositoryWindow">
+        <q-card style="width: 700px; max-width: 80vw;">
+            <q-card-section>
+                <div class="text-h6">Create new repository</div>
+            </q-card-section>
+
+            <q-separator />
+
+            <q-form 
+                ref="AddRepositoryWindowForm" 
+                @submit="$emit('submit', oAddRepositoryWindow)" 
+            >
+                <q-card-section>
+                    <q-input 
+                        filled
+                        v-model="oAddRepositoryWindow.sName" 
+                        label="Name" 
+                        :rules="aNameRules"
+                    />
+                    <q-input 
+                        filled
+                        v-model="oAddRepositoryWindow.sURL" 
+                        label="Git repository URL" 
+                        placeholder="https://github.com/hightemp/appGitMarkdownDocs.git"
+                        :rules="aURLRules"
+                    />
+
+                    <user-selector 
+                        v-model="oAddRepositoryWindow.iUserIndex"
+                        :aUsers="aUsers"
+                    />
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                    <q-btn flat label="Cancel" color="primary" v-close-popup />
+                    <q-btn 
+                        :disabled="!bAddRepositoryWindowValid"
+                        flat 
+                        label="Create" 
+                        color="primary" 
+                        v-close-popup 
+                        type="submit" 
+                    />
+                </q-card-actions>
+            </q-form>
+
+        </q-card>
+    </q-dialog>    
+</template>
+
+<script>
+    
+import Vue, { VueConstructor } from 'vue'
+import UserSelector from '../components/UserSelector.vue'
+
+export default {
+    name: 'AddRepositoryWindow',
+
+    components: {
+        'user-selector': UserSelector
+    },
+            
+    props: {
+        bShowAddRepositoryWindow: {
+            type: Boolean, 
+            default: false,
+            required: false
+        },
+        aUsers: {
+            type: Array,
+            required: true
+        }
+    },
+
+    computed: {
+        bAddRepositoryWindowValid: {
+            set: function(bValue)
+            {
+                console.log("bAddRepositoryWindowValid set", bValue);
+                this.oAddRepositoryWindow.bValid = bValue;
+            },
+            get: function()
+            {
+                console.log("bAddRepositoryWindowValid get");
+                var oThis = this;
+                
+                this.$nextTick(function()
+                {
+                    console.log(Object.assign({}, this.$refs));
+                    this
+                        .$refs
+                        .AddRepositoryWindowForm
+                        .validate()
+                        .then(function(bValue)
+                        {
+                            console.log("AddRepositoryWindowForm validate", bValue);
+                            
+                            if (oThis.oAddRepositoryWindow.bValid != bValue) {
+                                oThis.bAddRepositoryWindowValid = bValue;
+                            }
+                        });                    
+                });
+                
+                return this.oAddRepositoryWindow.bValid;
+            },
+            cache: false
+        }
+    },
+    
+    data: function()
+    {
+        return {
+            aNameRules: [ 
+                window.oIndexPage.fnValidateRepositoryName,
+                window.oIndexPage.fnValidateIsEmpty
+            ],
+            aURLRules: [ 
+                window.oIndexPage.fnValidateRepositoryURL,
+                window.oIndexPage.fnValidateIsEmpty
+            ],
+            oAddRepositoryWindow: {
+                bValid: false,
+                sName: "",
+                sURL: "",
+                iUserIndex: 0
+            }
+        };
+    },
+    
+    mounted: function()
+    {
+        console.log("AddRepositoryWindow mounted");
+        this
+            .$refs
+            .AddRepositoryWindowForm
+            .reset();
+    }
+}
+    
+</script>
