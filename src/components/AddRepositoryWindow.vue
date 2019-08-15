@@ -14,25 +14,25 @@
 
             <q-form 
                 ref="AddRepositoryWindowForm" 
-                @submit="$emit('submit', oAddRepositoryWindow)" 
+                @submit="$emit('submit', oAddRepositoryWindowForm)" 
             >
                 <q-card-section>
                     <q-input 
                         filled
-                        v-model="sName" 
+                        v-model="oAddRepositoryWindowForm.sName" 
                         label="Name" 
                         :rules="aNameRules"
                     />
                     <q-input 
                         filled
-                        v-model="sURL" 
+                        v-model="oAddRepositoryWindowForm.sURL" 
                         label="Git repository URL" 
                         placeholder="https://github.com/hightemp/appGitMarkdownDocs.git"
                         :rules="aURLRules"
                     />
 
                     <user-selector 
-                        v-model="iUserIndex"
+                        v-model="oAddRepositoryWindowForm.iUserIndex"
                         :aUsers="aUsers"
                     />
                 </q-card-section>
@@ -85,7 +85,7 @@ export default {
             set: function(bValue)
             {
                 console.log("bAddRepositoryWindowValid set", bValue);
-                this.bValid = bValue & this.iUserIndex>-1;
+                this.bValid = bValue & this.oAddRepositoryWindowForm.iUserIndex>-1;
             },
             get: function()
             {
@@ -94,7 +94,6 @@ export default {
                 
                 this.$nextTick(function()
                 {
-                    console.log(Object.assign({}, this.$refs));
                     this
                         .$refs
                         .AddRepositoryWindowForm
@@ -104,7 +103,7 @@ export default {
                             console.log("AddRepositoryWindowForm validate", bValue);
                             
                             if (oThis.bValid != bValue) {
-                                oThis.bAddRepositoryWindowValid = bValue & this.iUserIndex>-1;
+                                oThis.bAddRepositoryWindowValid = bValue & this.oAddRepositoryWindowForm.iUserIndex>-1;
                             }
                         });                    
                 });
@@ -136,9 +135,11 @@ export default {
                 window.oIndexPage.fnValidateIsEmpty
             ],
             bValid: false,
-            sName: "",
-            sURL: "",
-            iUserIndex: 0
+            oAddRepositoryWindowForm: {
+                sName: "",
+                sURL: "",
+                iUserIndex: 0
+            }
         };
     },
     

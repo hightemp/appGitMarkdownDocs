@@ -55,7 +55,7 @@
                                 <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
                             </q-item-section>
                         </q-item>
-                        <q-item clickable @click="">
+                        <q-item clickable @click="fnAddNewUser">
                             <q-item-section avatar>
                                 <q-icon name="add"/>
                             </q-item-section>
@@ -93,6 +93,7 @@
             :aUsers="[]"
             @submit="fnAddRepository"
             @visibility_change="bShowAddRepositoryWindow = $event"
+            @add_new_user="fnAddNewUser"
         />
     </div>
 </template>
@@ -101,6 +102,7 @@
     
 import RepositoryTabContent from '../components/RepositoryTabContent.vue'
 import AddRepositoryWindow from '../components/AddRepositoryWindow.vue'
+import AddNewUserWindow from '../components/AddNewUserWindow.vue'
 import Vue, { VueConstructor } from 'vue'
 
 export default {
@@ -108,7 +110,8 @@ export default {
 
     components: {
         'repository-tab-content': RepositoryTabContent,
-        'add-repository-window': AddRepositoryWindow
+        'add-repository-window': AddRepositoryWindow,
+        'add-new-user-window': AddNewUserWindow
     },
     
     data: function()
@@ -277,6 +280,12 @@ export default {
         {
             console.log('fnShowSettings');        
         },
+        
+        fnAddNewUser: function()
+        {
+            
+        },
+        
         fnCloseTab: function(iIndex)
         {
             console.log('fnCloseTab', arguments);

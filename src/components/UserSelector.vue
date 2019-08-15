@@ -43,6 +43,14 @@
                     <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
                 </q-item-section>
             </q-item>
+            <q-item clickable @click="$emit('add_new_user')">
+                <q-item-section avatar>
+                    <q-icon name="add"/>
+                </q-item-section>
+                <q-item-section>
+                    Add user
+                </q-item-section>
+            </q-item>            
         </q-list>
     </q-btn-dropdown>
 </template>
