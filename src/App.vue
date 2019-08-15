@@ -5,12 +5,6 @@
 </template>
 
 <script>
-import os from 'os'    
-import fs from 'fs'  
-import path from 'path'
-import process from 'process'
-
-import { Notify } from 'quasar'
 
 export default {
     name: 'App',
@@ -18,53 +12,19 @@ export default {
     data: function()
     {
         return {
-            sConfigurationFileName: '.appGitMarkdownDocs.json',
-            sConfigurationFilePath: path.join(os.homedir(), '.appGitMarkdownDocs.json'),
-            oConfiguration: null,
-            oDefaultConfiguration: {
-                sRepositoriesDirName: '.appGitMarkdownDocs_repositories',
-                sRepositoriesDirPath: path.join(os.homedir(), '.appGitMarkdownDocs_repositories'),                
-            }
+            
         }
     },
     
     methods: {
-        fnSaveConfiguration: function()
-        {
-            fs.writeFileSync(this.sConfigurationFilePath, JSON.stringify(this.oConfiguration));
-        },
-        fnLoadConfiguration: function()
-        {
-            var bCreateFile = false;
-            
-            try {
-                var sConfigurationFileContents = fs.readFileSync(this.sConfigurationFilePath);
 
-                this.oConfiguration = JSON.parse(sConfigurationFileContents);
-            } catch(oException) {
-                this.$q.notify({
-                    color: 'negative', 
-                    message: `The settings file ('${this.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
-                    icon: 'report_problem'
-                });
-            }
-
-            if (!this.oConfiguration) {
-                this.oConfiguration = {};
-                bCreateFile = true;
-            }
-            
-            this.oConfiguration = Object.assign(this.oDefaultConfiguration, this.oConfiguration);
-            
-            if (bCreateFile) {
-                this.fnSaveConfiguration();
-            }
-        }
     },
     
     created: function()
     {
         console.log('Application created');
+        
+        window.oApplication = this;
         
         Notify.setDefaults({
             position: 'top-right',

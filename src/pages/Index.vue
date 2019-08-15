@@ -32,7 +32,11 @@
                 <q-btn dense @click="fnShowEditRepositoryWindow()" icon="create" :disable="iActiveTab == -1"/>
                 <q-btn dense @click="fnPushRepository" icon="arrow_upward" :disable="iActiveTab == -1"/>
                 <q-btn dense @click="fnPullRepository" icon="arrow_downward" :disable="iActiveTab == -1"/>
-                <q-btn-dropdown 
+                <user-selector 
+                    v-model="iUserIndex"
+                    :aUsers="$root.oConfiguration.aUsers"
+                />
+                <!--q-btn-dropdown 
                     dense
                     flat
                     icon="person" 
@@ -63,7 +67,7 @@
                             </q-item-section>
                         </q-item>
                     </q-list>
-                </q-btn-dropdown>
+                </q-btn-dropdown-->
                 <q-btn dense @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
@@ -135,6 +139,7 @@ export default {
             
             iActiveTab: -1,
             
+            /*
             aUsers: [
                 {
                     sLogin: 'testuser',
@@ -151,7 +156,8 @@ export default {
                     sPassword: '123456'
                 }
             ],
-            
+            */
+           
             aRepositories: [
             /*
                 {
@@ -471,6 +477,7 @@ export default {
     created: function()
     {
         console.log('PageIndex created');
+        console.log('>>', this.$root);
         window.oIndexPage = this;
     },
     
