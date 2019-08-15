@@ -71,7 +71,8 @@ export default {
     
     props: {
         value: {
-            type: Number
+            type: Number,
+            default: -1
         },
         aUsers: {
             type: Array,
@@ -87,7 +88,9 @@ export default {
     watch: {
         value: function(iNewValue, iOldValue)
         {
-            if (this.aUsers[value]) {
+            console.log("UserSelector watch value", iNewValue);
+            
+            if (this.aUsers[this.value]) {
                 this.sIcon = "";
             }        
         }
@@ -100,6 +103,15 @@ export default {
             
             this.sIcon = "";
             this.$emit('input', iIndex);
+        }
+    },
+    
+    mounted: function()
+    {
+        console.log("UserSelector mounted", this.value);
+            
+        if (this.aUsers[this.value]) {
+            this.sIcon = "";
         }
     }
 }    

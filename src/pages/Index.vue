@@ -36,12 +36,11 @@
                     dense
                     flat
                     icon="person" 
-                    :disable="iActiveTab == -1"
                 >
-                    <q-list v-if="iActiveTab != -1">
+                    <q-list>
                         <q-item 
                             v-for="(oUser, iIndex) in aUsers"
-                            :active="aRepositories[iActiveTab].iUserIndex==iIndex"
+                            :active="fnGetCurrentUserID()==iIndex"
                             clickable
                             @click="fnSetUserForCurrentRepository(iIndex)"
                         >
@@ -90,7 +89,8 @@
         
         <add-repository-window
             :bShowAddRepositoryWindow="bShowAddRepositoryWindow"
-            :aUsers="[]"
+            :iUserIndex="fnGetCurrentUserID()"
+            :aUsers="aUsers"
             @submit="fnAddRepository"
             @visibility_change="bShowAddRepositoryWindow = $event"
             @add_new_user="fnAddNewUser"
@@ -126,6 +126,8 @@ export default {
             
             bShowAddRepositoryButtonSpinner: false,
             
+            iUserIndex: -1,
+            
             iActiveTab: -1,
             
             aUsers: [
@@ -146,7 +148,7 @@ export default {
             ],
             
             aRepositories: [
-            
+            /*
                 {
                     sName: "test",
                     sURL: "git@github.com:hightemp/wappGitMarkdownDocs.git",
@@ -206,7 +208,7 @@ export default {
                 {
                     sName: "test7",
                 }
-            
+            */
             ]
         };
     },
@@ -227,10 +229,23 @@ export default {
             });            
         },
         
+        fnGetCurrentUserID: function()
+        {
+            console.log('fnGetCurrentUserID');
+            if (this.aRepositories[this.iActiveTab]) {
+                return this.aRepositories[this.iActiveTab].iUserIndex;
+            }
+            
+            return this.iUserIndex;
+        },
+        
         fnSetUserForCurrentRepository: function(iUserIndex)
         {
             console.log('fnSetUserForCurrentRepository', iUserIndex);
-            Vue.set(this.aRepositories[this.iActiveTab], 'iUserIndex', iUserIndex);
+            this.iUserIndex = iUserIndex;
+            if (this.aRepositories[this.iActiveTab]) {
+                Vue.set(this.aRepositories[this.iActiveTab], 'iUserIndex', iUserIndex);
+            }
         },
         
         fnValidateIsEmpty: function(sValue)

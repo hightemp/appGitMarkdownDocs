@@ -3,6 +3,7 @@
         v-if="bShowAddRepositoryWindow_i" 
         v-model="bShowAddRepositoryWindow_i"
         @input="$emit('visibility_change', $event)"
+        @before-show="fnBeforeShow"
         @show="fnShow"
     >
         <q-card style="width: 700px; max-width: 80vw;">
@@ -30,7 +31,6 @@
                         placeholder="https://github.com/hightemp/appGitMarkdownDocs.git"
                         :rules="aURLRules"
                     />
-
                     <user-selector 
                         v-model="oAddRepositoryWindowForm.iUserIndex"
                         :aUsers="aUsers"
@@ -77,6 +77,11 @@ export default {
         aUsers: {
             type: Array,
             required: true
+        },
+        iUserIndex: {
+            type: Number,
+            default: -1,
+            required: false
         }
     },
 
@@ -97,13 +102,13 @@ export default {
                     this
                         .$refs
                         .AddRepositoryWindowForm
-                        .validate()
+                        .validate(false)
                         .then(function(bValue)
                         {
                             console.log("AddRepositoryWindowForm validate", bValue);
                             
                             if (oThis.bValid != bValue) {
-                                oThis.bAddRepositoryWindowValid = bValue & this.oAddRepositoryWindowForm.iUserIndex>-1;
+                                oThis.bAddRepositoryWindowValid = bValue & oThis.oAddRepositoryWindowForm.iUserIndex>-1;
                             }
                         });                    
                 });
@@ -138,20 +143,26 @@ export default {
             oAddRepositoryWindowForm: {
                 sName: "",
                 sURL: "",
-                iUserIndex: 0
+                iUserIndex: this.iUserIndex
             }
         };
     },
     
     methods: {
+        fnBeforeShow: function()
+        {
+            this.oAddRepositoryWindowForm = {
+                sName: "",
+                sURL: "",
+                iUserIndex: this.iUserIndex
+            };
+            //Vue.set(this.oAddRepositoryWindowForm, 'iUserIndex', this.iUserIndex);
+        },
         fnShow: function()
         {
-            this
-                .$refs
-                .AddRepositoryWindowForm
-                .reset();
+            this.$refs.AddRepositoryWindowForm.reset();
         }
-    }    
+    }
 }
     
 </script>

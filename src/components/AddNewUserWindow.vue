@@ -95,7 +95,7 @@ export default {
                     this
                         .$refs
                         .AddNewUserWindowForm
-                        .validate()
+                        .validate(false)
                         .then(function(bValue)
                         {
                             console.log("AddNewUserWindowForm validate", bValue);
@@ -103,7 +103,7 @@ export default {
                             if (oThis.bValid != bValue) {
                                 oThis.bAddRepositoryWindowValid = bValue;
                             }
-                        });                    
+                        });
                 });
                 
                 return this.bValid;
