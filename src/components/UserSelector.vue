@@ -16,7 +16,7 @@
                         <img :src="aUsers[value].sAvatarImageURL">
                     </q-avatar>
                     <div class="col">
-                        {{ aUsers[value].sUserName }}
+                        {{ aUsers[value].sLogin }} ({{ aUsers[value].sUserName }})
                     </div>
                 </template>
                 <template v-else>
@@ -39,7 +39,7 @@
                     </q-avatar>
                 </q-item-section>
                 <q-item-section>
-                    <q-item-label>{{ oUser.sUserName }}</q-item-label>
+                    <q-item-label>{{ oUser.sLogin }} ({{ oUser.sUserName }})</q-item-label>
                     <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
                 </q-item-section>
             </q-item>
@@ -76,22 +76,22 @@ export default {
         }
     },
     
+    watch: {
+        value: function(iNewValue, iOldValue)
+        {
+            if (this.aUsers[value]) {
+                this.sIcon = "";
+            }        
+        }
+    },
+    
     methods: {
         fnSelectUser: function(iIndex)
         {
             console.log("UserSelector - fnSelectUser", iIndex);
             
             this.sIcon = "";
-            this.value = iIndex;
-        }
-    },
-    
-    mounted: function()
-    {
-        console.log("UserSelector - mounted");
-        
-        if (this.value!=-1) {
-            this.sIcon = "";
+            this.$emit('input', iIndex);
         }
     }
 }    

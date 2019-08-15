@@ -1,5 +1,10 @@
 <template>
-    <q-dialog v-if="bShowAddRepositoryWindow" v-model="bShowAddRepositoryWindow">
+    <q-dialog 
+        v-if="bShowAddRepositoryWindow_i" 
+        v-model="bShowAddRepositoryWindow_i"
+        @input="$emit('visibility_change', $event)"
+        @show="fnShow"
+    >
         <q-card style="width: 700px; max-width: 80vw;">
             <q-card-section>
                 <div class="text-h6">Create new repository</div>
@@ -14,20 +19,20 @@
                 <q-card-section>
                     <q-input 
                         filled
-                        v-model="oAddRepositoryWindow.sName" 
+                        v-model="sName" 
                         label="Name" 
                         :rules="aNameRules"
                     />
                     <q-input 
                         filled
-                        v-model="oAddRepositoryWindow.sURL" 
+                        v-model="sURL" 
                         label="Git repository URL" 
                         placeholder="https://github.com/hightemp/appGitMarkdownDocs.git"
                         :rules="aURLRules"
                     />
 
                     <user-selector 
-                        v-model="oAddRepositoryWindow.iUserIndex"
+                        v-model="iUserIndex"
                         :aUsers="aUsers"
                     />
                 </q-card-section>
@@ -80,7 +85,7 @@ export default {
             set: function(bValue)
             {
                 console.log("bAddRepositoryWindowValid set", bValue);
-                this.oAddRepositoryWindow.bValid = bValue;
+                this.bValid = bValue & this.iUserIndex>-1;
             },
             get: function()
             {
@@ -98,21 +103,30 @@ export default {
                         {
                             console.log("AddRepositoryWindowForm validate", bValue);
                             
-                            if (oThis.oAddRepositoryWindow.bValid != bValue) {
-                                oThis.bAddRepositoryWindowValid = bValue;
+                            if (oThis.bValid != bValue) {
+                                oThis.bAddRepositoryWindowValid = bValue & this.iUserIndex>-1;
                             }
                         });                    
                 });
                 
-                return this.oAddRepositoryWindow.bValid;
+                return this.bValid;
             },
             cache: false
+        }
+    },
+    
+    watch: {
+        bShowAddRepositoryWindow: function(bNewValue, bOldValue)
+        {
+            console.log("AddRepositoryWindow watch bShowAddRepositoryWindow", bNewValue);
+            this.bShowAddRepositoryWindow_i = bNewValue;
         }
     },
     
     data: function()
     {
         return {
+            bShowAddRepositoryWindow_i: false,
             aNameRules: [ 
                 window.oIndexPage.fnValidateRepositoryName,
                 window.oIndexPage.fnValidateIsEmpty
@@ -121,23 +135,22 @@ export default {
                 window.oIndexPage.fnValidateRepositoryURL,
                 window.oIndexPage.fnValidateIsEmpty
             ],
-            oAddRepositoryWindow: {
-                bValid: false,
-                sName: "",
-                sURL: "",
-                iUserIndex: 0
-            }
+            bValid: false,
+            sName: "",
+            sURL: "",
+            iUserIndex: 0
         };
     },
     
-    mounted: function()
-    {
-        console.log("AddRepositoryWindow mounted");
-        this
-            .$refs
-            .AddRepositoryWindowForm
-            .reset();
-    }
+    methods: {
+        fnShow: function()
+        {
+            this
+                .$refs
+                .AddRepositoryWindowForm
+                .reset();
+        }
+    }    
 }
     
 </script>

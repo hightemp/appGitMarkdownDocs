@@ -90,8 +90,9 @@
         
         <add-repository-window
             :bShowAddRepositoryWindow="bShowAddRepositoryWindow"
-            :aUsers="aUsers"
+            :aUsers="[]"
             @submit="fnAddRepository"
+            @visibility_change="bShowAddRepositoryWindow = $event"
         />
     </div>
 </template>
@@ -126,14 +127,16 @@ export default {
             
             aUsers: [
                 {
+                    sLogin: 'testuser',
                     sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
-                    sUserName: 'testuser',
+                    sUserName: 'Vasja Pupkin',
                     sEmail: 'test@test.com',
                     sPassword: '123456'
                 },
                 {
+                    sLogin: 'testuser2',
                     sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
-                    sUserName: 'testuser2',
+                    sUserName: 'Petja Vasichkin',
                     sEmail: 'test2@test.com',
                     sPassword: '123456'
                 }
