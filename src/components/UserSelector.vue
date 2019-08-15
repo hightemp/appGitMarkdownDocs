@@ -31,6 +31,7 @@
                 v-for="(oUser, iIndex) in aUsers"
                 :active="value==iIndex"
                 clickable
+                v-close-popup
                 @click="fnSelectUser(iIndex)"
             >
                 <q-item-section avatar>
@@ -43,7 +44,11 @@
                     <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
                 </q-item-section>
             </q-item>
-            <q-item clickable @click="$emit('add_new_user')">
+            <q-item 
+                clickable 
+                v-close-popup
+                @click="fnShowAddNewUserWindow()"
+            >
                 <q-item-section avatar>
                     <q-icon name="add"/>
                 </q-item-section>
@@ -97,6 +102,12 @@ export default {
     },
     
     methods: {
+        fnShowAddNewUserWindow: function() 
+        {
+            console.log("fnShowAddNewUserWindow");
+            
+            oIndexPage.bShowAddNewUserWindow = true;
+        },
         fnSelectUser: function(iIndex)
         {
             console.log("UserSelector - fnSelectUser", iIndex);

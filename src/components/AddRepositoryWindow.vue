@@ -15,7 +15,7 @@
 
             <q-form 
                 ref="AddRepositoryWindowForm" 
-                @submit="$emit('submit', oAddRepositoryWindowForm)" 
+                @submit="oIndexPage.fnAddRepository(oAddRepositoryWindowForm)" 
             >
                 <q-card-section>
                     <q-input 
@@ -156,7 +156,6 @@ export default {
                 sURL: "",
                 iUserIndex: this.iUserIndex
             };
-            //Vue.set(this.oAddRepositoryWindowForm, 'iUserIndex', this.iUserIndex);
         },
         fnShow: function()
         {

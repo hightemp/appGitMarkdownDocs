@@ -4,6 +4,7 @@
         v-if="bShowAddNewUserWindow_i" 
         v-model="bShowAddNewUserWindow_i"
         @input="$emit('visibility_change', $event)"
+        @before-show="fnBeforeShow"
         @show="fnShow"
     >
         <q-card style="width: 700px; max-width: 80vw;">
@@ -15,13 +16,14 @@
 
             <q-form 
                 ref="AddNewUserWindowForm" 
-                @submit="$emit('submit', oAddNewUserWindowForm)" 
+                @submit="oIndexPage.fnAddNewUser(oAddNewUserWindowForm)" 
             >
-                <q-card-section>
+                <q-card-section class="q-gutter-md">
                     <q-input 
                         filled
                         v-model="oAddNewUserWindowForm.sName" 
                         label="Login" 
+                        hide-bottom-space
                         :rules="aLoginRules"
                     />
                     <q-input 
@@ -101,7 +103,7 @@ export default {
                             console.log("AddNewUserWindowForm validate", bValue);
                             
                             if (oThis.bValid != bValue) {
-                                oThis.bAddRepositoryWindowValid = bValue;
+                                oThis.bAddNewUserWindowValid = bValue;
                             }
                         });
                 });
@@ -136,6 +138,23 @@ export default {
                 sPassword: ''
             }
         };
-    },    
+    },
+    
+    methods: {
+        fnBeforeShow: function()
+        {
+            this.oAddRepositoryWindowForm = {
+                sLogin: '',
+                sAvatarImageURL: '',
+                sUserName: '',
+                sEmail: '',
+                sPassword: ''
+            };
+        },
+        fnShow: function()
+        {
+            this.$refs.AddNewUserWindowForm.reset();
+        }
+    }    
 }
 </script>

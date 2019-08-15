@@ -91,9 +91,12 @@
             :bShowAddRepositoryWindow="bShowAddRepositoryWindow"
             :iUserIndex="fnGetCurrentUserID()"
             :aUsers="aUsers"
-            @submit="fnAddRepository"
             @visibility_change="bShowAddRepositoryWindow = $event"
-            @add_new_user="fnAddNewUser"
+        />
+        
+        <add-new-user-window
+            :bShowAddNewUserWindow="bShowAddNewUserWindow"
+            @visibility_change="bShowAddNewUserWindow = $event"
         />
     </div>
 </template>
@@ -103,6 +106,7 @@
 import RepositoryTabContent from '../components/RepositoryTabContent.vue'
 import AddRepositoryWindow from '../components/AddRepositoryWindow.vue'
 import AddNewUserWindow from '../components/AddNewUserWindow.vue'
+import _ from "underscore"
 import Vue, { VueConstructor } from 'vue'
 
 export default {
@@ -122,6 +126,7 @@ export default {
             sRepositoryURL: '',
             
             bShowAddRepositoryWindow: false,
+            bShowAddNewUserWindow: false,
             bShowEditRepositoryWindow: false,
             
             bShowAddRepositoryButtonSpinner: false,
@@ -250,8 +255,12 @@ export default {
         
         fnValidateIsEmpty: function(sValue)
         {
-            console.log('fnValidateIsEmpty', sValue);
-            return sValue != '' || 'Can\'t be empty.';
+            var bResult =
+                (_.isString(sValue) && sValue !='')
+                || (_.isNumber(sValue))
+                || 'Can\'t be empty.';
+            console.log('fnValidateIsEmpty', sValue, bResult);
+            return bResult;
         },
         fnValidateRepositoryName: function(sValue)
         {
@@ -296,8 +305,9 @@ export default {
             console.log('fnShowSettings');        
         },
         
-        fnAddNewUser: function()
+        fnAddNewUser: function(oAddNewUserWindowForm)
         {
+            console.log('fnAddNewUser', oAddNewUserWindowForm);
             
         },
         
@@ -359,9 +369,9 @@ export default {
                 });
             */
         },
-        fnAddRepository: function(oAddRepositoryWindow)
+        fnAddRepository: function(oAddRepositoryWindowForm)
         {
-            console.log('fnAddRepository', oAddRepositoryWindow);
+            console.log('fnAddRepository', oAddRepositoryWindowForm);
             /*
             this.bShowAddRepositoryButtonSpinner = true;
             
