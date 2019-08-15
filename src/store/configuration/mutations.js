@@ -1,5 +1,5 @@
 
-export function SET_CONFIGURATION(state) 
+export function SET_CONFIGURATION(state, { oConfiguration }) 
 {
-    state.
+    state.oConfiguration = oConfiguration;
 }

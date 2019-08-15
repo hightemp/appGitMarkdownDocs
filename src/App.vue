@@ -9,17 +9,6 @@
 export default {
     name: 'App',
     
-    data: function()
-    {
-        return {
-            
-        }
-    },
-    
-    methods: {
-
-    },
-    
     created: function()
     {
         console.log('Application created');

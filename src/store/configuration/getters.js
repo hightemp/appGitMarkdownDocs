@@ -1,5 +1,5 @@
 
-export function CONFIGURATION(state) 
+export function CONFIGURATION(state, getters) 
 {
-    return state.oConfiguration;
+    return getters.oConfiguration;
 }
