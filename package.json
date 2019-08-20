@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "avatar-generator": "^2.0.2",
     "axios": "^0.18.1",
+    "gravatar": "^1.8.0",
     "isomorphic-git": "^0.60.1",
     "quasar": "^1.0.0",
+    "request-promise": "^4.2.4",
     "underscore": "^1.9.1",
+    "validator": "^11.1.0",
     "vue-i18n": "^8.0.0"
   },
   "devDependencies": {

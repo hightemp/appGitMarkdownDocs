@@ -82,6 +82,8 @@ import AddNewUserWindow from '../components/AddNewUserWindow.vue'
 import UserSelector from '../components/UserSelector.vue'
 import _ from "underscore"
 import Vue, { VueConstructor } from 'vue'
+import { mapGetters } from 'vuex'
+import AvatarMe from '../lib/avatar'
 
 export default {
     name: 'PageIndex',
@@ -95,104 +97,30 @@ export default {
     
     data: function()
     {
-        return {            
-            sNewRepositoryFieldState: '',
-            sNewRepositoryInvalidFeedback: '',
-            sRepositoryURL: '',
-            
+        return {
             bShowAddRepositoryWindow: false,
             bShowAddNewUserWindow: false,
             bShowEditRepositoryWindow: false,
             
-            bShowAddRepositoryButtonSpinner: false,
-            
-            iUserIndex: -1,
-            
-            iActiveTab: -1,
-            
-            /*
-            aUsers: [
-                {
-                    sLogin: 'testuser',
-                    sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
-                    sUserName: 'Vasja Pupkin',
-                    sEmail: 'test@test.com',
-                    sPassword: '123456'
-                },
-                {
-                    sLogin: 'testuser2',
-                    sAvatarImageURL: 'https://cdn.quasar.dev/logo/svg/quasar-logo.svg',
-                    sUserName: 'Petja Vasichkin',
-                    sEmail: 'test2@test.com',
-                    sPassword: '123456'
-                }
-            ],
-            */
-           
-            aRepositories: [
-            /*
-                {
-                    sName: "test",
-                    sURL: "git@github.com:hightemp/wappGitMarkdownDocs.git",
-                    iUserIndex: 0,
-                    sPath: '',
-                    oTags: {
-                        "tag1": [
-                            "article1"
-                        ],
-                        "tag2": [
-                            "article2"
-                        ],
-                        "tag3": [],
-                        "tag4": [],
-                        "tag5": [],
-                        "tag6": [],
-                        "tag7": [],
-                        "tag8": [],
-                        "tag9": [],
-                        "tag10": [],
-                        "tag11": [],
-                        "tag12": [],
-                        "tag13": [],
-                        "tag14": [],
-                        "tag15": [],
-                        "tag16": [],
-                        "tag17": [],
-                    },
-                    oPinndedTags: {
-                        "tag3": [],
-                        "tag4": [],
-                        "tag5": [],
-                        "tag6": [],
-                        "tag7": [],                        
-                    },
-                    aArticles: [
-                        "article1",
-                        "article2",
-                        "article3",
-                    ]
-                },
-                {
-                    sName: "test2",
-                },
-                {
-                    sName: "test3",
-                },
-                {
-                    sName: "test4",
-                },
-                {
-                    sName: "test5",
-                },
-                {
-                    sName: "test6",
-                },
-                {
-                    sName: "test7",
-                }
-            */
-            ]
+            bShowAddRepositoryButtonSpinner: false            
         };
+    },
+
+    computed: {
+        iUserIndex: {
+            set(iUserIndex) { this.$store.dispatch('configuration/SET_USER_INDEX', { iUserIndex }) },
+            get() { return this.$store.getters['configuration/USER_INDEX'] },
+            cache: false
+        },
+        iActiveTab: {
+            set(iActiveTab) { this.$store.dispatch('configuration/SET_ACTIVE_TAB', { iActiveTab }) },
+            get() { return this.$store.getters['configuration/ACTIVE_TAB'] },
+            cache: false
+        },
+
+        ...mapGetters({
+            aRepositories: 'configuration/REPOSITORIES'
+        })
     },
   
     methods: {
@@ -228,26 +156,6 @@ export default {
             if (this.aRepositories[this.iActiveTab]) {
                 Vue.set(this.aRepositories[this.iActiveTab], 'iUserIndex', iUserIndex);
             }
-        },
-        
-        fnValidateIsEmpty: function(sValue)
-        {
-            var bResult =
-                (_.isString(sValue) && sValue !='')
-                || (_.isNumber(sValue))
-                || 'Can\'t be empty.';
-            console.log('fnValidateIsEmpty', sValue, bResult);
-            return bResult;
-        },
-        fnValidateRepositoryName: function(sValue)
-        {
-            console.log('fnValidateRepositoryName', sValue);
-            return this.fnFindRepository({ sName: sValue }) == -1 || 'A repository with the same name already exists.';
-        },
-        fnValidateRepositoryURL: function(sValue)
-        {
-            console.log('fnValidateRepositoryURL', sValue);
-            return /^https?:\/\//.test(sValue) || 'HTTP protocol must be used';
         },
         
         fnFindRepository: function(oParameters = {})
@@ -286,6 +194,12 @@ export default {
         {
             console.log('fnAddNewUser', oAddNewUserWindowForm);
             
+            this.$store.dispatch('ADD_USER', oAddNewUserWindowForm);
+
+            AvatarMe.fetchAvatar(oAddNewUserWindowForm.sEmail, oAddNewUserWindowForm.sLogin, (err, avatar) => {
+                if (err) console.log(err)
+                console.log(avatar)
+            });
         },
         
         fnCloseTab: function(iIndex)

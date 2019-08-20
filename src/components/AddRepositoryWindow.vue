@@ -1,7 +1,7 @@
 <template>
     <q-dialog 
-        v-if="bShowAddRepositoryWindow_i" 
-        v-model="bShowAddRepositoryWindow_i"
+        v-if="m_bShowAddRepositoryWindow" 
+        v-model="m_bShowAddRepositoryWindow"
         @input="$emit('visibility_change', $event)"
         @before-show="fnBeforeShow"
         @show="fnShow"
@@ -61,6 +61,7 @@
 import Vue, { VueConstructor } from 'vue'
 import UserSelector from '../components/UserSelector.vue'
 import { mapGetters } from 'vuex'
+import { fnValidateIsEmpty, fnValidateRepositoryName, fnValidateRepositoryURL } from '../validation_rules'
 
 export default {
     name: 'AddRepositoryWindow',
@@ -123,21 +124,21 @@ export default {
         bShowAddRepositoryWindow: function(bNewValue, bOldValue)
         {
             console.log("AddRepositoryWindow watch bShowAddRepositoryWindow", bNewValue);
-            this.bShowAddRepositoryWindow_i = bNewValue;
+            this.m_bShowAddRepositoryWindow = bNewValue;
         }
     },
     
     data: function()
     {
         return {
-            bShowAddRepositoryWindow_i: false,
+            m_bShowAddRepositoryWindow: false,
             aNameRules: [ 
-                window.oIndexPage.fnValidateRepositoryName,
-                window.oIndexPage.fnValidateIsEmpty
+                fnValidateRepositoryName,
+                fnValidateIsEmpty
             ],
-            aURLRules: [ 
-                window.oIndexPage.fnValidateRepositoryURL,
-                window.oIndexPage.fnValidateIsEmpty
+            aURLRules: [
+                fnValidateRepositoryURL,
+                fnValidateIsEmpty
             ],
             bValid: false,
             oAddRepositoryWindowForm: {

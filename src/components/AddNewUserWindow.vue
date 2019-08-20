@@ -63,7 +63,9 @@
 </template>
 
 <script>
+
 import Vue, { VueConstructor } from 'vue'
+import { fnValidateIsEmpty } from '../validation_rules'
 
 export default {
     name: 'AddNewUserWindow',
@@ -126,8 +128,8 @@ export default {
     {
         return {
             bShowAddNewUserWindow_i: false,
-            aLoginRules: [ 
-                window.oIndexPage.fnValidateIsEmpty
+            aLoginRules: [
+                fnValidateIsEmpty
             ],
             bValid: false,
             oAddNewUserWindowForm: {
