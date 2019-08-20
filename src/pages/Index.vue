@@ -47,8 +47,8 @@
             >
                 <q-tab-panel 
                     v-for="(oItem, iIndex) in aRepositories" 
-                    :key="iIndex"
                     :name="iIndex"
+                    :key="iIndex"
                 >
                     <repository-tab-content
                         :ref="'repository_component_'+iIndex"
