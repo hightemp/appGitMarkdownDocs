@@ -243,6 +243,7 @@
                         v-ripple
                         active-class="list-active-item"
                         v-for="(sItem, iIndex) in aArticles"
+                        :key="iIndex"
                         :active="iActiveArticle==iIndex"
                         v-if="sArticleFilterString=='' 
                             || (

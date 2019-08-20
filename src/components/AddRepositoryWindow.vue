@@ -60,6 +60,7 @@
     
 import Vue, { VueConstructor } from 'vue'
 import UserSelector from '../components/UserSelector.vue'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'AddRepositoryWindow',
@@ -74,10 +75,6 @@ export default {
             default: false,
             required: false
         },
-        aUsers: {
-            type: Array,
-            required: true
-        },
         iUserIndex: {
             type: Number,
             default: -1,
@@ -86,6 +83,9 @@ export default {
     },
 
     computed: {
+        ...mapGetters({
+            aUsers: 'configuration/USERS'
+        }),
         bAddRepositoryWindowValid: {
             set: function(bValue)
             {

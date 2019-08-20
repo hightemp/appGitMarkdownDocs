@@ -4,23 +4,24 @@
         filled
         flat
         no-caps
+        :dense="bDense"
         align="left"
-        class="full-width q-mt-md"
+        :class="{ 'full-width': bFullWidth, 'q-mt-md': bFullWidth }"
         :icon="sIcon" 
         :disable="bDisabled"
     >
         <template slot="label">
             <div class="row col">
-                <template v-if="aUsers[value]">
+                <template v-if="m_aUsers[value]">
                     <q-avatar size="28px">
-                        <img :src="aUsers[value].sAvatarImageURL">
+                        <img :src="m_aUsers[value].sAvatarImageURL">
                     </q-avatar>
-                    <div class="col">
-                        {{ aUsers[value].sLogin }} ({{ aUsers[value].sUserName }})
+                    <div v-if="bShowLogin" class="col">
+                        {{ m_aUsers[value].sLogin }} ({{ m_aUsers[value].sUserName }})
                     </div>
                 </template>
                 <template v-else>
-                    <div class="col">
+                    <div v-if="bShowLogin" class="col">
                         Select user
                     </div>
                 </template>
@@ -28,7 +29,8 @@
         </template>
         <q-list>
             <q-item 
-                v-for="(oUser, iIndex) in aUsers"
+                v-for="(oUser, iIndex) in m_aUsers"
+                :key="iIndex"
                 :active="value==iIndex"
                 clickable
                 v-close-popup
@@ -63,6 +65,8 @@
 <script>
     
 import Vue, { VueConstructor } from 'vue'
+import { mapGetters } from 'vuex'
+import _ from 'underscore'
 
 export default {
     name: 'UserSelector',
@@ -70,18 +74,42 @@ export default {
     data: function()
     {
         return {
-            sIcon: "person"
+            sIcon: "person",
+            m_aUsers: []
         }
     },
-    
+
+    computed: {
+        ...mapGetters({
+            aConfigurationUsers: 'configuration/USERS'
+        })
+    },
+
     props: {
         value: {
             type: Number,
+            required: false,
             default: -1
         },
+        bShowLogin: {
+            type: Boolean, 
+            default: false,
+            required: false
+        },
+        bDense: {
+            type: Boolean, 
+            default: false,
+            required: false
+        },
+        bFullWidth: {
+            type: Boolean, 
+            default: false,
+            required: false
+        },
         aUsers: {
-            type: Array,
-            required: true
+            validator: p => _.isArray(p) || p === null,
+            required: false,
+            default: null
         },
         bDisabled: {
             type: Boolean, 
@@ -91,6 +119,12 @@ export default {
     },
     
     watch: {
+        aUsers: function(aValue)
+        {
+            console.log('UserSelector watch aUsers');
+
+            this.fnSetUsers(aValue);
+        },
         value: function(iNewValue, iOldValue)
         {
             console.log("UserSelector watch value", iNewValue);
@@ -102,6 +136,16 @@ export default {
     },
     
     methods: {
+        fnSetUsers: function(aValue)
+        {
+            console.log("fnSetUsers");
+
+            if (aValue===null) {
+                this.m_aUsers = this.aConfigurationUsers;
+            } else {
+                this.m_aUsers = aValue;
+            }
+        },
         fnShowAddNewUserWindow: function() 
         {
             console.log("fnShowAddNewUserWindow");
@@ -112,7 +156,9 @@ export default {
         {
             console.log("UserSelector - fnSelectUser", iIndex);
             
-            this.sIcon = "";
+            if (this.m_aUsers[iIndex]) {
+                this.sIcon = "";
+            }
             this.$emit('input', iIndex);
         }
     },
@@ -120,8 +166,10 @@ export default {
     mounted: function()
     {
         console.log("UserSelector mounted", this.value);
+
+        this.fnSetUsers(this.aUsers);
             
-        if (this.aUsers[this.value]) {
+        if (this.m_aUsers[this.value]) {
             this.sIcon = "";
         }
     }

@@ -6,6 +6,9 @@
 
 <script>
 
+import fs from 'fs'  
+import { Notify } from 'quasar'
+
 export default {
     name: 'App',
     
@@ -22,14 +25,16 @@ export default {
             actions: [{ icon: 'close', color: 'white' }]
         })
         
-        console.log('Configuration file path', this.sConfigurationFilePath);
+        this.$store.dispatch('configuration/LOAD_CONFIGURATION');
         
-        this.fnLoadConfiguration();
+        var oConfigurationState = this.$store.getters['configuration/CONFIGURATION_STATE'];
+        var oConfiguration = oConfigurationState.oConfiguration;
         
-        console.log('Configuration', this.oConfiguration);
-        console.log('Repositories dir path', this.oConfiguration['sRepositoriesDirPath'], fs.existsSync(this.oConfiguration['sRepositoriesDirPath']));
+        console.log('Configuration file path', oConfigurationState.sConfigurationFilePath); 
+        console.log('Configuration', oConfiguration);
+        console.log('Repositories dir path', oConfiguration['sRepositoriesDirPath'], fs.existsSync(oConfiguration['sRepositoriesDirPath']));
         
-        var sRepositoriesDirPath = this.oConfiguration['sRepositoriesDirPath'];
+        var sRepositoriesDirPath = oConfiguration['sRepositoriesDirPath'];
         
         if (!fs.existsSync(sRepositoriesDirPath)) {
             console.log('Repositories dir not found', sRepositoriesDirPath);

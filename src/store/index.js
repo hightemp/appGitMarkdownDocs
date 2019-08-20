@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 import configuration from './configuration'
 
 Vue.use(Vuex)
-
+console.log('VUEX LOADED');
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation

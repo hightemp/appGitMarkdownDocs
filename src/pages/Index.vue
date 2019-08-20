@@ -11,6 +11,7 @@
             >
                 <q-tab 
                     v-for="(oItem, iIndex) in aRepositories" 
+                    :key="iIndex"
                     :name="iIndex"
                 >
                     <template slot="default">
@@ -34,40 +35,8 @@
                 <q-btn dense @click="fnPullRepository" icon="arrow_downward" :disable="iActiveTab == -1"/>
                 <user-selector 
                     v-model="iUserIndex"
-                    :aUsers="$root.oConfiguration.aUsers"
+                    bDense
                 />
-                <!--q-btn-dropdown 
-                    dense
-                    flat
-                    icon="person" 
-                >
-                    <q-list>
-                        <q-item 
-                            v-for="(oUser, iIndex) in aUsers"
-                            :active="fnGetCurrentUserID()==iIndex"
-                            clickable
-                            @click="fnSetUserForCurrentRepository(iIndex)"
-                        >
-                            <q-item-section avatar>
-                                <q-avatar>
-                                    <img :src="oUser.sAvatarImageURL">
-                                </q-avatar>
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label>{{ oUser.sUserName }}</q-item-label>
-                                <q-item-label caption>{{ oUser.sEmail }}</q-item-label>
-                            </q-item-section>
-                        </q-item>
-                        <q-item clickable @click="fnAddNewUser">
-                            <q-item-section avatar>
-                                <q-icon name="add"/>
-                            </q-item-section>
-                            <q-item-section>
-                                Add user
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </q-btn-dropdown-->
                 <q-btn dense @click="fnShowSettings" icon="settings" />
             </q-btn-group>
         </div>
@@ -94,7 +63,6 @@
         <add-repository-window
             :bShowAddRepositoryWindow="bShowAddRepositoryWindow"
             :iUserIndex="fnGetCurrentUserID()"
-            :aUsers="aUsers"
             @visibility_change="bShowAddRepositoryWindow = $event"
         />
         
@@ -110,6 +78,7 @@
 import RepositoryTabContent from '../components/RepositoryTabContent.vue'
 import AddRepositoryWindow from '../components/AddRepositoryWindow.vue'
 import AddNewUserWindow from '../components/AddNewUserWindow.vue'
+import UserSelector from '../components/UserSelector.vue'
 import _ from "underscore"
 import Vue, { VueConstructor } from 'vue'
 
@@ -119,7 +88,8 @@ export default {
     components: {
         'repository-tab-content': RepositoryTabContent,
         'add-repository-window': AddRepositoryWindow,
-        'add-new-user-window': AddNewUserWindow
+        'add-new-user-window': AddNewUserWindow,
+        'user-selector': UserSelector
     },
     
     data: function()
@@ -477,7 +447,6 @@ export default {
     created: function()
     {
         console.log('PageIndex created');
-        console.log('>>', this.$root);
         window.oIndexPage = this;
     },
     
