@@ -8,6 +8,8 @@ import { Notify } from 'quasar'
 export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
 {
     console.log('SAVE_CONFIGURATION');
+    fs.mkdirSync(state.sConfigurationDirPath);
+    fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath);
     fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 

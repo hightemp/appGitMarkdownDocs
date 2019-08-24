@@ -3,11 +3,12 @@ import os from 'os'
 import path from 'path'
 
 export default {
-    sConfigurationFileName: '.appGitMarkdownDocs.json',
-    sConfigurationFilePath: path.join(os.homedir(), '.appGitMarkdownDocs.json'),
+    sConfigurationFileName: 'config.json',
+    sConfigurationDirPath: path.join(os.homedir(), '.appGitMarkdownDocs'),
+    sConfigurationFilePath: path.join(os.homedir(), '.appGitMarkdownDocs', 'config.json'),
     oConfiguration: {
-        sRepositoriesDirName: '.appGitMarkdownDocs_repositories',
-        sRepositoriesDirPath: path.join(os.homedir(), '.appGitMarkdownDocs_repositories'),
+        sRepositoriesDirName: 'repositories',
+        sRepositoriesDirPath: path.join(os.homedir(), '.appGitMarkdownDocs', 'repositories'),
 
         iUserIndex: -1,
         aUsers: [
