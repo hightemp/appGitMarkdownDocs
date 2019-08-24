@@ -8,8 +8,16 @@ import { Notify } from 'quasar'
 export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
 {
     console.log('SAVE_CONFIGURATION');
-    fs.mkdirSync(state.sConfigurationDirPath);
-    fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath);
+    if (!fs.existsSync(state.sConfigurationDirPath)) {
+        if (fs.mkdirSync(state.sConfigurationDirPath)) {
+            console.log(state.sConfigurationDirPath+' directory created');
+        }
+    }
+    if (!fs.existsSync(state.oConfiguration.sRepositoriesDirPath)) {
+        if (fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath)) {
+            console.log(state.oConfiguration.sRepositoriesDirPath+' directory created');
+        }
+    }
     fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="indexpage-top-panel">
+        <div id="indexpage-top-panel" class="q-electron-drag">
             <q-tabs
                 @input="fnSelectTab"
                 align="left"
@@ -38,6 +38,9 @@
                     bDense
                 />
                 <q-btn dense @click="fnShowSettings" icon="settings" />
+                <q-btn v-if="$q.platform.is.desktop" dense @click="fnMinimizeWindow" icon="expand_more" />
+                <q-btn v-if="$q.platform.is.desktop" dense @click="fnMaximizeWindow" :icon="m_bWindowIsMaximized ? 'unfold_more' : 'expand_less'" />
+                <q-btn v-if="$q.platform.is.desktop" dense @click="fnCloseWindow" icon="close" />
             </q-btn-group>
         </div>
         
@@ -83,7 +86,7 @@ import UserSelector from '../components/UserSelector.vue'
 import _ from "underscore"
 import Vue, { VueConstructor } from 'vue'
 import { mapGetters } from 'vuex'
-import AvatarMe from '../lib/avatar'
+//import AvatarMe from '../lib/avatar'
 
 export default {
     name: 'PageIndex',
@@ -101,12 +104,35 @@ export default {
             bShowAddRepositoryWindow: false,
             bShowAddNewUserWindow: false,
             bShowEditRepositoryWindow: false,
-            
+
+            m_bWindowIsMaximized: false,
+
             bShowAddRepositoryButtonSpinner: false            
         };
     },
 
     computed: {
+        bWindowIsMaximized: {
+            set(bValue) { 
+                if (process.env.MODE === 'electron') {
+                    //this.m_bWindowIsMaximized = bValue
+
+                    if (bValue) {
+                        oBrowserWindow.maximize()
+                    } else {
+                        oBrowserWindow.unmaximize()
+                    }
+                }
+            },
+            get() { 
+                if (process.env.MODE === 'electron') {
+                    console.log('bWindowIsMaximized - get', oBrowserWindow.isMaximized())
+
+                    return oBrowserWindow.isMaximized()
+                }
+            },
+            cache: false
+        },
         iUserIndex: {
             set(iUserIndex) { this.$store.dispatch('configuration/SET_USER_INDEX', { iUserIndex }) },
             get() { return this.$store.getters['configuration/USER_INDEX'] },
@@ -124,6 +150,23 @@ export default {
     },
   
     methods: {
+
+        fnMinimizeWindow() {
+            if (process.env.MODE === 'electron') {
+                this.$q.electron.remote.BrowserWindow.getFocusedWindow().minimize()
+            }
+        },
+
+        fnMaximizeWindow() {
+            this.bWindowIsMaximized = !this.bWindowIsMaximized
+        },
+
+        fnCloseWindow() {
+            if (process.env.MODE === 'electron') {
+                this.$q.electron.remote.BrowserWindow.getFocusedWindow().close()
+            }
+        },
+         
         fnPushRepository: function()
         {
             console.log('fnPushRepository');
@@ -363,6 +406,10 @@ export default {
     {
         console.log('PageIndex created');
         window.oIndexPage = this;
+        window.oBrowserWindow = this.$q.electron.remote.BrowserWindow.getAllWindows()[0];
+
+        oBrowserWindow.on('maximize', function() { oIndexPage.m_bWindowIsMaximized = true; });
+        oBrowserWindow.on('unmaximize', function() { oIndexPage.m_bWindowIsMaximized = false; });            
     },
     
     mounted: function()

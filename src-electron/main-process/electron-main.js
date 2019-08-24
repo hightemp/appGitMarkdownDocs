@@ -17,6 +17,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
+    frame: false,
+    icon: __dirname + '/../icons/icon.png',
     useContentSize: true,
     webPreferences: {
       nodeIntegration: true
@@ -24,6 +26,7 @@ function createWindow () {
   })
   
   mainWindow.setMenu(null)
+  //mainWindow.removeMenu()
 
   mainWindow.loadURL(process.env.APP_URL)
 
