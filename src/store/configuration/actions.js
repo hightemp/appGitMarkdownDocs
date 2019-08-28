@@ -93,6 +93,11 @@ export function SET_ACTIVE_TAB({ commit, state, dispatch, getters }, { iActiveTa
 {
     console.log('SET_ACTIVE_TAB', state, { iActiveTab });
 
+    if (iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT()) {
+        iActiveTab = -1;
+        console.log('SET_ACTIVE_TAB: iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT()');
+        console.log('SET_ACTIVE_TAB: iActiveTab = -1');
+    }
     commit('SET_ACTIVE_TAB', { iActiveTab });
     dispatch('SAVE_CONFIGURATION');
 }
