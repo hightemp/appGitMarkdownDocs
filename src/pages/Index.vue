@@ -37,7 +37,28 @@
                     v-model="iUserIndex"
                     bDense
                 />
-                <q-btn dense @click="fnShowSettings" icon="settings" />
+
+                <q-btn-dropdown dense icon="dehaze">
+                    <q-list>
+                        <q-item clickable v-close-popup @click="fnShowSettings">
+                            <q-item-section avatar>
+                                <q-icon name="settings"/>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>Settings</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                        <q-separator />
+                        <q-item clickable v-close-popup @click="fnShowDiffWindow">
+                            <q-item-section avatar>
+                                <q-icon name="iso"/>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>Diff tool</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-btn-dropdown>
 
                 <q-separator vertical />
 
