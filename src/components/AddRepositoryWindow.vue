@@ -61,7 +61,7 @@
 import Vue, { VueConstructor } from 'vue'
 import UserSelector from '../components/UserSelector.vue'
 import { mapGetters } from 'vuex'
-import { fnValidateIsEmpty, fnValidateRepositoryName, fnValidateRepositoryURL } from '../validation_rules'
+import { fnValidateIsNotEmpty, fnValidateRepositoryName, fnValidateRepositoryURL } from '../validation_rules'
 
 export default {
     name: 'AddRepositoryWindow',
@@ -134,11 +134,11 @@ export default {
             m_bShowAddRepositoryWindow: false,
             aNameRules: [ 
                 fnValidateRepositoryName,
-                fnValidateIsEmpty
+                fnValidateIsNotEmpty
             ],
             aURLRules: [
                 fnValidateRepositoryURL,
-                fnValidateIsEmpty
+                fnValidateIsNotEmpty
             ],
             bValid: false,
             oAddRepositoryWindowForm: {

@@ -38,6 +38,9 @@
                     bDense
                 />
                 <q-btn dense @click="fnShowSettings" icon="settings" />
+
+                <q-separator vertical />
+
                 <q-btn v-if="$q.platform.is.desktop" dense @click="fnMinimizeWindow" icon="expand_more" />
                 <q-btn v-if="$q.platform.is.desktop" dense @click="fnMaximizeWindow" :icon="m_bWindowIsMaximized ? 'unfold_more' : 'expand_less'" />
                 <q-btn v-if="$q.platform.is.desktop" dense @click="fnCloseWindow" icon="close" />
@@ -239,10 +242,12 @@ export default {
             
             this.$store.dispatch('ADD_USER', oAddNewUserWindowForm);
 
+            /*
             AvatarMe.fetchAvatar(oAddNewUserWindowForm.sEmail, oAddNewUserWindowForm.sLogin, (err, avatar) => {
                 if (err) console.log(err)
                 console.log(avatar)
             });
+            */
         },
         
         fnCloseTab: function(iIndex)

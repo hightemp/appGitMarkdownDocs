@@ -37,10 +37,19 @@
                         label="E-mail" 
                     />
                     <q-input 
-                        filled
+                        filled 
                         v-model="oAddNewUserWindowForm.sPassword" 
-                        label="Password" 
-                    />
+                        :type="!bShowPassword ? 'password' : 'text'" 
+                        label="Password"
+                    >
+                        <template v-slot:append>
+                            <q-icon
+                                :name="!bShowPassword ? 'visibility_off' : 'visibility'"
+                                class="cursor-pointer"
+                                @click="bShowPassword = !bShowPassword"
+                            />
+                        </template>
+                    </q-input>
                 </q-card-section>
 
                 <q-separator />
@@ -65,7 +74,7 @@
 <script>
 
 import Vue, { VueConstructor } from 'vue'
-import { fnValidateIsEmpty } from '../validation_rules'
+import { fnValidateIsNotEmpty } from '../validation_rules'
 
 export default {
     name: 'AddNewUserWindow',
@@ -127,9 +136,10 @@ export default {
     data: function()
     {
         return {
+            bShowPassword: false,
             bShowAddNewUserWindow_i: false,
             aLoginRules: [
-                fnValidateIsEmpty
+                fnValidateIsNotEmpty
             ],
             bValid: false,
             oAddNewUserWindowForm: {

@@ -2,11 +2,11 @@
 import _ from "underscore"
 import validator from "validator"
 
-export function fnValidateIsEmpty(sValue)
+export function fnValidateIsNotEmpty(sValue)
 {
-    console.log('fnValidateIsEmpty', sValue);
+    console.log('fnValidateIsNotEmpty', sValue);
 
-    return validator.isEmpty(sValue) || 'Can\'t be empty.';
+    return !validator.isEmpty(sValue) || 'Can\'t be empty.';
 }
 
 export function fnValidateRepositoryName(sValue)
