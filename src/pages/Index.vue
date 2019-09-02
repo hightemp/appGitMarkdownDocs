@@ -110,7 +110,6 @@ import UserSelector from '../components/UserSelector.vue'
 import _ from "underscore"
 import Vue, { VueConstructor } from 'vue'
 import { mapGetters } from 'vuex'
-//import AvatarMe from '../lib/avatar'
 
 export default {
     name: 'PageIndex',

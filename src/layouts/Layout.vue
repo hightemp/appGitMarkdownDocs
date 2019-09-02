@@ -6,7 +6,7 @@
 import { openURL } from 'quasar'
 
 export default {
-    name: 'MyLayout',
+    name: 'Layout',
 
     methods: {
         openURL

@@ -1,7 +1,6 @@
 
 import request from 'request-promise'
 import gravatar from 'gravatar'
-import validator from 'validator'
 import Avatars from '@dicebear/avatars';
 import sprites from '@dicebear/avatars-initials-sprites';
 

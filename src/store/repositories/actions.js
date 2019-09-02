@@ -5,9 +5,9 @@ import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
 
-export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
+export function SAVE_REPOSITORIES({ commit, state, dispatch, getters, rootGetters })
 {
-    console.log('SAVE_CONFIGURATION');
+    console.log('SAVE_REPOSITORIES', rootGetters.configuration);
     if (!fs.existsSync(state.sConfigurationDirPath)) {
         if (fs.mkdirSync(state.sConfigurationDirPath)) {
             console.log(state.sConfigurationDirPath+' directory created');
@@ -21,9 +21,9 @@ export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
     fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
+export function LOAD_REPOSITORIES({ commit, state, dispatch, getters })
 {
-    console.log('LOAD_CONFIGURATION');
+    console.log('LOAD_REPOSITORIES');
 
     try {
         var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
@@ -37,36 +37,31 @@ export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
             icon: 'report_problem'
         });
 
-        dispatch('SAVE_CONFIGURATION');
+        dispatch('SAVE_REPOSITORIES');
     }
 }
 
-export function SET_CONFIGURATION({ commit, state, dispatch, getters }, { oConfiguration }) 
+export function SET_REPOSITORY({ commit, state, dispatch, getters }, { iIndex, oRepository }) 
 {
-    console.log('SET_CONFIGURATION', state, { oConfiguration });
+    console.log('SET_REPOSITORY', state, { oRepository });
 
-    commit('SET_CONFIGURATION', { oConfiguration });
-    dispatch('SAVE_CONFIGURATION');
+    commit('SET_REPOSITORY', { iIndex, oRepository });
+    dispatch('SAVE_REPOSITORIES');
 }
 
-export function SET_USER_INDEX({ commit, state, dispatch, getters }, { iUserIndex }) 
+export function ADD_REPOSITORY({ commit, state, dispatch, getters }, { oRepository }) 
 {
-    console.log('SET_USER_INDEX', state, { iUserIndex });
+    console.log('ADD_REPOSITORY', state, { oRepository });
 
-    commit('SET_USER_INDEX', { iUserIndex });
-    dispatch('SAVE_CONFIGURATION');
+    commit('ADD_REPOSITORY', { oRepository });
+    dispatch('SAVE_REPOSITORIES');
 }
 
-export function SET_ACTIVE_TAB({ commit, state, dispatch, getters }, { iActiveTab }) 
+export function DELETE_REPOSITORY({ commit, state, dispatch, getters }, { iIndex }) 
 {
-    console.log('SET_ACTIVE_TAB', state, { iActiveTab });
+    console.log('DELETE_REPOSITORY', state, { iIndex });
 
-    if (iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT) {
-        iActiveTab = -1;
-        console.log('SET_ACTIVE_TAB: iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT');
-        console.log('SET_ACTIVE_TAB: iActiveTab = -1');
-    }
-    commit('SET_ACTIVE_TAB', { iActiveTab });
-    dispatch('SAVE_CONFIGURATION');
+    commit('DELETE_REPOSITORY', { iIndex });
+    dispatch('SAVE_REPOSITORIES');
 }
 
