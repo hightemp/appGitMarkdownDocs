@@ -5,23 +5,34 @@ import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
 
-export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
+export function SAVE({ commit, state, dispatch, getters })
 {
     console.log('SAVE CONFIGURATION');
-    if (!fs.existsSync(state.sConfigurationDirPath)) {
-        if (fs.mkdirSync(state.sConfigurationDirPath)) {
-            console.log(state.sConfigurationDirPath+' directory created');
+
+    try {
+        if (!fs.existsSync(state.sConfigurationDirPath)) {
+            if (fs.mkdirSync(state.sConfigurationDirPath)) {
+                console.log(state.sConfigurationDirPath+' directory created');
+            }
         }
-    }
-    if (!fs.existsSync(state.oConfiguration.sRepositoriesDirPath)) {
-        if (fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath)) {
-            console.log(state.oConfiguration.sRepositoriesDirPath+' directory created');
+
+        if (!fs.existsSync(state.oConfiguration.sRepositoriesDirPath)) {
+            if (fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath)) {
+                console.log(state.oConfiguration.sRepositoriesDirPath+' directory created');
+            }
         }
+
+        fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
+    } catch (oException) {
+        Notify.create({
+            color: 'negative', 
+            message: `Can't save configuration file: ${oException.message}`, 
+            icon: 'report_problem'
+        });
     }
-    fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
+export function LOAD({ commit, state, dispatch, getters })
 {
     console.log('LOAD CONFIGURATION');
 
@@ -32,8 +43,8 @@ export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
         commit('SET', { oConfiguration });
     } catch(oException) {
         Notify.create({
-            color: 'negative', 
-            message: `The settings file ('${state.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
+            color: 'warning', 
+            message: `The configuration file ('${state.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
             icon: 'report_problem'
         });
 
@@ -57,13 +68,13 @@ export function SET_USER_INDEX({ commit, state, dispatch, getters }, { iUserInde
     dispatch('SAVE');
 }
 
-export function SET_ACTIVE_TAB({ commit, state, dispatch, getters }, { iActiveTab }) 
+export function SET_ACTIVE_TAB({ commit, state, dispatch, getters, rootGetters }, { iActiveTab }) 
 {
     console.log('SET_ACTIVE_TAB', state, { iActiveTab });
 
-    if (iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT) {
+    if (iActiveTab<-1 || iActiveTab>rootGetters['repositories/COUNT']) {
         iActiveTab = -1;
-        console.log('SET_ACTIVE_TAB: iActiveTab<-1 || iActiveTab>getters.REPOSITORIES_COUNT');
+        console.log("SET_ACTIVE_TAB: iActiveTab<-1 || iActiveTab>rootGetters['repositories/COUNT']");
         console.log('SET_ACTIVE_TAB: iActiveTab = -1');
     }
     commit('SET_ACTIVE_TAB', { iActiveTab });

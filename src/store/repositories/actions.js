@@ -4,40 +4,61 @@ import fs from 'fs'
 import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
+import _ from 'underscore'
 
 export function SAVE({ commit, state, dispatch, getters, rootGetters })
 {
-    console.log('SAVE REPOSITORIES', rootGetters.configuration);
-    if (!fs.existsSync(state.sConfigurationDirPath)) {
-        if (fs.mkdirSync(state.sConfigurationDirPath)) {
-            console.log(state.sConfigurationDirPath+' directory created');
-        }
+    console.log('SAVE REPOSITORIES');
+
+    var oConfigurationState = rootGetters['configuration/STATE']
+
+    try {
+        fs.writeFileSync(oConfigurationState.sRepositoriesFilePath, JSON.stringify(state));
+    } catch(oException) {
+        Notify.create({
+            color: 'negative', 
+            message: `Can't save repositories file: ${oException.message}`, 
+            icon: 'report_problem'
+        });
     }
-    if (!fs.existsSync(state.oConfiguration.sRepositoriesDirPath)) {
-        if (fs.mkdirSync(state.oConfiguration.sRepositoriesDirPath)) {
-            console.log(state.oConfiguration.sRepositoriesDirPath+' directory created');
-        }
-    }
-    fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD({ commit, state, dispatch, getters })
+export function LOAD({ commit, state, dispatch, getters, rootGetters })
 {
     console.log('LOAD REPOSITORIES');
 
     try {
-        //var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
-        //var oConfiguration = JSON.parse(sConfigurationFileContents);
+        var oConfigurationState = rootGetters['configuration/STATE']
+        var sRepositoriesFileContents = fs.readFileSync(oConfigurationState.sRepositoriesFilePath).toString();
+        var aRepositories = JSON.parse(sRepositoriesFileContents);
 
-        //commit('SET_CONFIGURATION', { oConfiguration });
+        if (!_.isArray(aRepositories)) {
+            Notify.create({
+                color: 'negative', 
+                message: `Wrong root element type in ${oConfigurationState.sRepositoriesFilePath}`, 
+                icon: 'report_problem'
+            });
+
+            throw new Error();
+        }
+
+        commit('SET', { aRepositories });
     } catch(oException) {
         dispatch('SAVE');
     }
 }
 
-export function SET({ commit, state, dispatch, getters }, { iIndex, oRepository }) 
+export function SET({ commit, state, dispatch, getters }, { aRepositories }) 
 {
-    console.log('SET REPOSITORY', state, { oRepository });
+    console.log('SET REPOSITORY', state, { aRepositories });
+
+    commit('SET', { aRepositories });
+    dispatch('SAVE');
+}
+
+export function UPDATE({ commit, state, dispatch, getters }, { iIndex, oRepository }) 
+{
+    console.log('UPDATE REPOSITORY', state, { iIndex, oRepository });
 
     commit('SET', { iIndex, oRepository });
     dispatch('SAVE');

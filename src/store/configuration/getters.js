@@ -1,7 +1,7 @@
 
-export function CONFIGURATION_STATE(state, getters) 
+export function STATE(state, getters) 
 {
-    console.log('CONFIGURATION_STATE', state);
+    console.log('CONFIGURATION STATE', state);
     return state;
 }
 

@@ -1,12 +1,12 @@
 
-export function USERS(state, getters) 
+export function ALL(state, getters) 
 {
-    console.log('USERS', state);
+    console.log('USERS ALL', state);
     return state;
 }
 
-export function USERS_COUNT(state, getters) 
+export function COUNT(state, getters) 
 {
-    console.log('USERS_COUNT', state.length);
+    console.log('USERS COUNT', state.length);
     return state.length;
 }

@@ -27,7 +27,7 @@ export default {
         
         this.$store.dispatch('configuration/LOAD');
         
-        var oConfigurationState = this.$store.getters['configuration/CONFIGURATION_STATE'];
+        var oConfigurationState = this.$store.getters['configuration/STATE'];
         var oConfiguration = oConfigurationState.oConfiguration;
         
         console.log('Configuration file path', oConfigurationState.sConfigurationFilePath); 

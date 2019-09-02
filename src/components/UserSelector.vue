@@ -81,7 +81,7 @@ export default {
 
     computed: {
         ...mapGetters({
-            aConfigurationUsers: 'configuration/USERS'
+            aConfigurationUsers: 'users/ALL'
         })
     },
 

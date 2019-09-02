@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import configuration from './configuration'
+import users from './users'
+import repositories from './repositories'
 
 Vue.use(Vuex)
 console.log('VUEX LOADED');
@@ -14,7 +16,9 @@ console.log('VUEX LOADED');
 export default function (/* { ssrContext } */) {
     const Store = new Vuex.Store({
         modules: {
-            configuration
+            configuration,
+            users,
+            repositories
         },
 
         // enable strict mode (adds overhead!)

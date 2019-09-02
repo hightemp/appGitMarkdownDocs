@@ -4,35 +4,61 @@ import fs from 'fs'
 import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
+import _ from 'underscore'
 
-export function SAVE({ commit, state, dispatch, getters })
+export function SAVE({ commit, state, dispatch, getters, rootGetters })
 {
     console.log('SAVE USERS');
-    if (!fs.existsSync(state.sConfigurationDirPath)) {
-        if (fs.mkdirSync(state.sConfigurationDirPath)) {
-            console.log(state.sConfigurationDirPath+' directory created');
-        }
+
+    var oConfigurationState = rootGetters['configuration/STATE']
+
+    try {
+        fs.writeFileSync(oConfigurationState.sUsersFilePath, JSON.stringify(state));
+    } catch (oException) {
+        Notify.create({
+            color: 'negative', 
+            message: `Can't save users file: ${oException.message}`, 
+            icon: 'report_problem'
+        });
     }
-    fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD({ commit, state, dispatch, getters })
+export function LOAD({ commit, state, dispatch, getters, rootGetters })
 {
     console.log('LOAD USERS');
 
     try {
-        //var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
-        //var oConfiguration = JSON.parse(sConfigurationFileContents);
+        var oConfigurationState = rootGetters['configuration/STATE']
+        var sUsersFileContents = fs.readFileSync(oConfigurationState.sUsersFilePath).toString();
+        var aUsers = JSON.parse(sUsersFileContents);
 
-        //commit('SET_USERS', { oConfiguration });
+        if (!_.isArray(aUsers)) {
+            Notify.create({
+                color: 'negative', 
+                message: `Wrong root element type in ${oConfigurationState.sUsersFilePath}`, 
+                icon: 'report_problem'
+            });
+
+            throw new Error();
+        }
+
+        commit('SET', { aUsers });
     } catch(oException) {
         dispatch('SAVE');
     }
 }
 
-export function SET({ commit, state, dispatch, getters }, { iIndex, oUser }) 
+export function SET({ commit, state, dispatch, getters }, { aUsers }) 
 {
-    console.log('SET USER', state, { oUser });
+    console.log('SET USERS', state, { aUsers });
+
+    commit('SET', { aUsers });
+    dispatch('SAVE');
+}
+
+export function UPDATE({ commit, state, dispatch, getters }, { iIndex, oUser }) 
+{
+    console.log('UPDATE USER', state, { iIndex, oUser });
 
     commit('SET', { iIndex, oUser });
     dispatch('SAVE');

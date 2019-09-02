@@ -1,11 +1,18 @@
 
 import User from '~/classes/User'
 
-export function SET(state, { iIndex, oUser }) 
+export function SET(state, { aUsers }) 
 {
-    console.log('SET USER', state, { iIndex, oUser });
+    console.log('SET USER', state, { aUsers });
 
-    for (sKey in oUser) {
+    state = aUsers;
+}
+
+export function UPDATE(state, { iIndex, oUser }) 
+{
+    console.log('UPDATE USER', state, { iIndex, oUser });
+
+    for (var sKey in oUser) {
         state[iIndex][sKey] = oUser[sKey];
     }
 }

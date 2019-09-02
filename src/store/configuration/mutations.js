@@ -2,6 +2,7 @@
 export function SET(state, { oConfiguration }) 
 {
     console.log('SET CONFIGURATION', state, { oConfiguration });
+    
     state.oConfiguration = oConfiguration;
 }
 

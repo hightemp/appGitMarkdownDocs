@@ -85,7 +85,7 @@ export default {
 
     computed: {
         ...mapGetters({
-            aUsers: 'configuration/USERS'
+            aUsers: 'users/ALL'
         }),
         bAddRepositoryWindowValid: {
             set: function(bValue)

@@ -1,9 +1,16 @@
 
-export function SET(state, { iIndex, oRepository }) 
+export function SET(state, { aRepositories }) 
 {
-    console.log('SET REPOSITORY', state, { iIndex, oRepository });
+    console.log('SET REPOSITORY', state, { aRepositories });
 
-    for (sKey in oRepository) {
+    state = aRepositories;
+}
+
+export function UPDATE(state, { iIndex, oRepository }) 
+{
+    console.log('UPDATE REPOSITORY', state, { iIndex, oRepository });
+
+    for (var sKey in oRepository) {
         state[iIndex][sKey] = oRepository[sKey];
     }
 }

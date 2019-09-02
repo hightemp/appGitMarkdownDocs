@@ -1,12 +1,12 @@
 
-export function REPOSITORIES(state, getters) 
+export function ALL(state, getters) 
 {
-    console.log('REPOSITORIES', state);
+    console.log('REPOSITORIES ALL', state);
     return state;
 }
 
-export function REPOSITORIES_COUNT(state, getters) 
+export function COUNT(state, getters) 
 {
-    console.log('REPOSITORIES_COUNT', state.length);
+    console.log('REPOSITORIES COUNT', state.length);
     return state.length;
 }

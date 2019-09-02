@@ -40,7 +40,7 @@
 
                 <q-btn-dropdown dense icon="dehaze">
                     <q-list>
-                        <q-item clickable v-close-popup @click="fnShowSettings">
+                        <q-item clickable v-close-popup @click="fnShowConfigurationWindow">
                             <q-item-section avatar>
                                 <q-icon name="settings"/>
                             </q-item-section>
@@ -168,7 +168,7 @@ export default {
         },
 
         ...mapGetters({
-            aRepositories: 'configuration/REPOSITORIES'
+            aRepositories: 'repositories/ALL'
         })
     },
   
@@ -251,9 +251,13 @@ export default {
             
             this.bShowEditRepositoryWindow = true;
         },
-        fnShowSettings: function()
+        fnShowConfigurationWindow: function()
         {
-            console.log('fnShowSettings');        
+            console.log('fnShowConfigurationWindow');        
+        },
+        fnShowDiffWindow: function()
+        {
+            console.log('fnShowDiffWindow');
         },
         
         fnAddNewUser: function(oAddNewUserWindowForm)
