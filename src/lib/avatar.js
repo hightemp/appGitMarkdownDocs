@@ -2,13 +2,38 @@
 import request from 'request-promise'
 import gravatar from 'gravatar'
 import validator from 'validator'
+import Avatars from '@dicebear/avatars';
+import sprites from '@dicebear/avatars-initials-sprites';
 
 class Avatar {
 
-    async fetchGoogleAvatar(email) 
+    async fnGetURL(sEmail)
     {
+        console.log('fnGetAvatarURL', sEmail);
+
+        var sImageURL;
+
+        sImageURL = await this.fetchGoogleAvatar(sEmail);
+
+        if (!sImageURL) {
+            sImageURL = await fethGravatarImage(sEmail);
+
+            if (!sImageURL) {
+                let oOptions = {};
+                let oAvatars = new Avatars(await sprites(oOptions));
+                sImageURL = await oAvatars.create(sEmail);
+            }
+        }
+
+        return sImageURL;
+    }
+
+    async fetchGoogleAvatar(sEmail) 
+    {
+        console.log('fetchGoogleAvatar', sEmail);
+
         const googleAvatarApi = 'https://picasaweb.google.com/data/entry/api/user/'
-        const avatarUrl = googleAvatarApi + email + '?alt=json'
+        const avatarUrl = googleAvatarApi + sEmail + '?alt=json'
     
         var response = await request({
             method: 'GET',
@@ -25,9 +50,11 @@ class Avatar {
         return image;
     }
     
-    async fethGravatarImage (email) 
+    async fethGravatarImage(sEmail) 
     {
-        const gravatarUrl = gravatar.url(email, { protocol: 'https', s: '100', r: 'x', d: '404' });
+        console.log('fethGravatarImage', sEmail);
+
+        const gravatarUrl = gravatar.url(sEmail, { protocol: 'https', s: '100', r: 'x', d: '404' });
     
         var response = await request({
             method: 'GET',

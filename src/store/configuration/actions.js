@@ -81,6 +81,15 @@ export function ADD_USER({ commit, state, dispatch, getters }, { oUser })
     dispatch('SAVE_CONFIGURATION');
 }
 
+export function DELETE_USER({ commit, state, dispatch, getters }, { iUserIndex }) 
+{
+    console.log('DELETE_USER', state, { iUserIndex });
+
+    commit('DELETE_USER', { iUserIndex });
+    dispatch('SAVE_CONFIGURATION');
+}
+
+
 export function SET_USER_INDEX({ commit, state, dispatch, getters }, { iUserIndex }) 
 {
     console.log('SET_USER_INDEX', state, { iUserIndex });

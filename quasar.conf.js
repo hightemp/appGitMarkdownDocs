@@ -1,6 +1,8 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
+var path = require('path')
+
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
@@ -90,6 +92,10 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       extendWebpack (cfg) {
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          '~': path.resolve(__dirname, './src')
+        }
         cfg.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
