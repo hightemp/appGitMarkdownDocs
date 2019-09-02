@@ -1,7 +1,7 @@
 
-export function SET_CONFIGURATION(state, { oConfiguration }) 
+export function SET(state, { oConfiguration }) 
 {
-    console.log('SET_CONFIGURATION', state, { oConfiguration });
+    console.log('SET CONFIGURATION', state, { oConfiguration });
     state.oConfiguration = oConfiguration;
 }
 

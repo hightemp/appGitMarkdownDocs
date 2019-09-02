@@ -5,9 +5,9 @@ import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
 
-export function SAVE_USERS({ commit, state, dispatch, getters })
+export function SAVE({ commit, state, dispatch, getters })
 {
-    console.log('SAVE_USERS');
+    console.log('SAVE USERS');
     if (!fs.existsSync(state.sConfigurationDirPath)) {
         if (fs.mkdirSync(state.sConfigurationDirPath)) {
             console.log(state.sConfigurationDirPath+' directory created');
@@ -16,47 +16,41 @@ export function SAVE_USERS({ commit, state, dispatch, getters })
     fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD_USERS({ commit, state, dispatch, getters })
+export function LOAD({ commit, state, dispatch, getters })
 {
-    console.log('LOAD_USERS');
+    console.log('LOAD USERS');
 
     try {
-        var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
-        var oConfiguration = JSON.parse(sConfigurationFileContents);
+        //var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
+        //var oConfiguration = JSON.parse(sConfigurationFileContents);
 
-        commit('SET_USERS', { oConfiguration });
+        //commit('SET_USERS', { oConfiguration });
     } catch(oException) {
-        Notify.create({
-            color: 'negative', 
-            message: `The settings file ('${state.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
-            icon: 'report_problem'
-        });
-
-        dispatch('SAVE_USERS');
+        dispatch('SAVE');
     }
 }
 
-export function SET_USER({ commit, state, dispatch, getters }, { iIndex, oUser }) 
+export function SET({ commit, state, dispatch, getters }, { iIndex, oUser }) 
 {
-    console.log('SET_USER', state, { oUser });
+    console.log('SET USER', state, { oUser });
 
-    commit('SET_USER', { iIndex, oUser });
-    dispatch('SAVE_CONFIGURATION');
+    commit('SET', { iIndex, oUser });
+    dispatch('SAVE');
 }
 
-export function ADD_USER({ commit, state, dispatch, getters }, { oUser }) 
+export function ADD({ commit, state, dispatch, getters }, { oUser }) 
 {
-    console.log('ADD_USER', state, { oUser });
+    console.log('ADD USER', state, { oUser });
 
-    commit('ADD_USER', { oUser });
-    dispatch('SAVE_CONFIGURATION');
+    commit('ADD', { oUser });
+    dispatch('SAVE');
 }
 
-export function DELETE_USER({ commit, state, dispatch, getters }, { iUserIndex }) 
+export function DELETE({ commit, state, dispatch, getters }, { iUserIndex }) 
 {
-    console.log('DELETE_USER', state, { iUserIndex });
+    console.log('DELETE USER', state, { iUserIndex });
 
-    commit('DELETE_USER', { iUserIndex });
-    dispatch('SAVE_CONFIGURATION');
+    commit('DELETE', { iUserIndex });
+    dispatch('SAVE');
 }
 

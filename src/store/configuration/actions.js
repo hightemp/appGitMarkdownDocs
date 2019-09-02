@@ -7,7 +7,7 @@ import { Notify } from 'quasar'
 
 export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
 {
-    console.log('SAVE_CONFIGURATION');
+    console.log('SAVE CONFIGURATION');
     if (!fs.existsSync(state.sConfigurationDirPath)) {
         if (fs.mkdirSync(state.sConfigurationDirPath)) {
             console.log(state.sConfigurationDirPath+' directory created');
@@ -23,13 +23,13 @@ export function SAVE_CONFIGURATION({ commit, state, dispatch, getters })
 
 export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
 {
-    console.log('LOAD_CONFIGURATION');
+    console.log('LOAD CONFIGURATION');
 
     try {
         var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
         var oConfiguration = JSON.parse(sConfigurationFileContents);
 
-        commit('SET_CONFIGURATION', { oConfiguration });
+        commit('SET', { oConfiguration });
     } catch(oException) {
         Notify.create({
             color: 'negative', 
@@ -37,16 +37,16 @@ export function LOAD_CONFIGURATION({ commit, state, dispatch, getters })
             icon: 'report_problem'
         });
 
-        dispatch('SAVE_CONFIGURATION');
+        dispatch('SAVE');
     }
 }
 
-export function SET_CONFIGURATION({ commit, state, dispatch, getters }, { oConfiguration }) 
+export function SET({ commit, state, dispatch, getters }, { oConfiguration }) 
 {
-    console.log('SET_CONFIGURATION', state, { oConfiguration });
+    console.log('SET CONFIGURATION', state, { oConfiguration });
 
-    commit('SET_CONFIGURATION', { oConfiguration });
-    dispatch('SAVE_CONFIGURATION');
+    commit('SET', { oConfiguration });
+    dispatch('SAVE');
 }
 
 export function SET_USER_INDEX({ commit, state, dispatch, getters }, { iUserIndex }) 
@@ -54,7 +54,7 @@ export function SET_USER_INDEX({ commit, state, dispatch, getters }, { iUserInde
     console.log('SET_USER_INDEX', state, { iUserIndex });
 
     commit('SET_USER_INDEX', { iUserIndex });
-    dispatch('SAVE_CONFIGURATION');
+    dispatch('SAVE');
 }
 
 export function SET_ACTIVE_TAB({ commit, state, dispatch, getters }, { iActiveTab }) 
@@ -67,6 +67,6 @@ export function SET_ACTIVE_TAB({ commit, state, dispatch, getters }, { iActiveTa
         console.log('SET_ACTIVE_TAB: iActiveTab = -1');
     }
     commit('SET_ACTIVE_TAB', { iActiveTab });
-    dispatch('SAVE_CONFIGURATION');
+    dispatch('SAVE');
 }
 

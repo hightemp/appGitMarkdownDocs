@@ -11,30 +11,6 @@ export function CONFIGURATION(state, getters)
     return state.oConfiguration;
 }
 
-export function USERS(state, getters) 
-{
-    console.log('USERS', state.oConfiguration.aUsers);
-    return state.oConfiguration.aUsers;
-}
-
-export function USERS_COUNT(state, getters) 
-{
-    console.log('USERS_COUNT', state.oConfiguration.aUsers.length);
-    return state.oConfiguration.aUsers.length;
-}
-
-export function REPOSITORIES(state, getters) 
-{
-    console.log('REPOSITORIES', state.oConfiguration.aRepositories);
-    return state.oConfiguration.aRepositories;
-}
-
-export function REPOSITORIES_COUNT(state, getters) 
-{
-    console.log('REPOSITORIES_COUNT', state.oConfiguration.aRepositories.length);
-    return state.oConfiguration.aRepositories.length;
-}
-
 export function USER_INDEX(state, getters) 
 {
     console.log('USER_INDEX', state.oConfiguration.iUserIndex);

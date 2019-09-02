@@ -5,9 +5,9 @@ import path from 'path'
 import process from 'process'
 import { Notify } from 'quasar'
 
-export function SAVE_REPOSITORIES({ commit, state, dispatch, getters, rootGetters })
+export function SAVE({ commit, state, dispatch, getters, rootGetters })
 {
-    console.log('SAVE_REPOSITORIES', rootGetters.configuration);
+    console.log('SAVE REPOSITORIES', rootGetters.configuration);
     if (!fs.existsSync(state.sConfigurationDirPath)) {
         if (fs.mkdirSync(state.sConfigurationDirPath)) {
             console.log(state.sConfigurationDirPath+' directory created');
@@ -21,47 +21,41 @@ export function SAVE_REPOSITORIES({ commit, state, dispatch, getters, rootGetter
     fs.writeFileSync(state.sConfigurationFilePath, JSON.stringify(state.oConfiguration));
 }
 
-export function LOAD_REPOSITORIES({ commit, state, dispatch, getters })
+export function LOAD({ commit, state, dispatch, getters })
 {
-    console.log('LOAD_REPOSITORIES');
+    console.log('LOAD REPOSITORIES');
 
     try {
-        var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
-        var oConfiguration = JSON.parse(sConfigurationFileContents);
+        //var sConfigurationFileContents = fs.readFileSync(state.sConfigurationFilePath).toString();
+        //var oConfiguration = JSON.parse(sConfigurationFileContents);
 
-        commit('SET_CONFIGURATION', { oConfiguration });
+        //commit('SET_CONFIGURATION', { oConfiguration });
     } catch(oException) {
-        Notify.create({
-            color: 'negative', 
-            message: `The settings file ('${state.sConfigurationFilePath}') was not found and a new one will be created. The default settings will be used.`, 
-            icon: 'report_problem'
-        });
-
-        dispatch('SAVE_REPOSITORIES');
+        dispatch('SAVE');
     }
 }
 
-export function SET_REPOSITORY({ commit, state, dispatch, getters }, { iIndex, oRepository }) 
+export function SET({ commit, state, dispatch, getters }, { iIndex, oRepository }) 
 {
-    console.log('SET_REPOSITORY', state, { oRepository });
+    console.log('SET REPOSITORY', state, { oRepository });
 
-    commit('SET_REPOSITORY', { iIndex, oRepository });
-    dispatch('SAVE_REPOSITORIES');
+    commit('SET', { iIndex, oRepository });
+    dispatch('SAVE');
 }
 
-export function ADD_REPOSITORY({ commit, state, dispatch, getters }, { oRepository }) 
+export function ADD({ commit, state, dispatch, getters }, { oRepository }) 
 {
-    console.log('ADD_REPOSITORY', state, { oRepository });
+    console.log('ADD REPOSITORY', state, { oRepository });
 
-    commit('ADD_REPOSITORY', { oRepository });
-    dispatch('SAVE_REPOSITORIES');
+    commit('ADD', { oRepository });
+    dispatch('SAVE');
 }
 
 export function DELETE_REPOSITORY({ commit, state, dispatch, getters }, { iIndex }) 
 {
-    console.log('DELETE_REPOSITORY', state, { iIndex });
+    console.log('DELETE REPOSITORY', state, { iIndex });
 
-    commit('DELETE_REPOSITORY', { iIndex });
-    dispatch('SAVE_REPOSITORIES');
+    commit('DELETE', { iIndex });
+    dispatch('SAVE');
 }
 

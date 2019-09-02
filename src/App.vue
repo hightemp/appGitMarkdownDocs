@@ -25,7 +25,7 @@ export default {
             actions: [{ icon: 'close', color: 'white' }]
         })
         
-        this.$store.dispatch('configuration/LOAD_CONFIGURATION');
+        this.$store.dispatch('configuration/LOAD');
         
         var oConfigurationState = this.$store.getters['configuration/CONFIGURATION_STATE'];
         var oConfiguration = oConfigurationState.oConfiguration;
@@ -34,6 +34,9 @@ export default {
         console.log('Configuration', oConfiguration);
         console.log('Repositories dir path', oConfiguration['sRepositoriesDirPath'], fs.existsSync(oConfiguration['sRepositoriesDirPath']));
         
+        this.$store.dispatch('users/LOAD');
+        this.$store.dispatch('repositories/LOAD');
+
         var sRepositoriesDirPath = oConfiguration['sRepositoriesDirPath'];
         
         if (!fs.existsSync(sRepositoriesDirPath)) {

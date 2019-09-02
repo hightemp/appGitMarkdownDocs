@@ -6,6 +6,8 @@ export default {
     sConfigurationFileName: 'config.json',
     sConfigurationDirPath: path.join(os.homedir(), '.appGitMarkdownDocs'),
     sConfigurationFilePath: path.join(os.homedir(), '.appGitMarkdownDocs', 'config.json'),
+    sUsersFilePath: path.join(os.homedir(), '.appGitMarkdownDocs', 'users.json'),
+    sRepositoriesFilePath: path.join(os.homedir(), '.appGitMarkdownDocs', 'repositories.json'),
     oConfiguration: {
         sRepositoriesDirName: 'repositories',
         sRepositoriesDirPath: path.join(os.homedir(), '.appGitMarkdownDocs', 'repositories'),
